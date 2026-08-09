@@ -90,7 +90,10 @@ const NavBar = () => {
       <nav className="md:sticky md:top-0 md:border-b md:hidden z-50 bg-white dark:bg-[#1E1E1E] border-gray-200 dark:border-zinc-700 shadow-sm transition-colors duration-300">
         <div className="max-w-7xl mx-auto h-16 px-3 flex items-center justify-between">
           <img
-            src={user?.profilePhoto || "https://i.pravatar.cc/150?img=12"}
+            src={
+              user?.profilePhoto ||
+              `https://ui-avatars.com/api/?name=${user?.userName}`
+            }
             alt=""
             className="w-10 h-10 rounded-full object-cover"
           />

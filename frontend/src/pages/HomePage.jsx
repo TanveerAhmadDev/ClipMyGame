@@ -75,7 +75,7 @@ const HomePage = () => {
     <>
       <NavBar />
 
-      <div className="bg-red-800 flex gap-5 h-full py-5 px-2 md:px-80 dark:bg-[#1E1E1E] transition-colors duration-300">
+      <div className=" flex gap-5 h-full py-5 px-2 md:px-80 dark:bg-[#1E1E1E] transition-colors duration-300">
         <div className="hidden md:block sticky top-20">
           <ProfileCard />
         </div>
