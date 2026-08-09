@@ -10,8 +10,8 @@ import OtpVerfiy from "./pages/OtpVerfiy";
 import ProtectedRoute from "./ProtectedRoute";
 import SignInPage from "./pages/SignInPage";
 import ProfilePage from "./pages/ProfilePage";
-import Discover from "./pages/discover";
 import BannerManagement from "./pages/BannerManagement";
+import DisCover from "./pages/DisCover";
 
 const App = () => {
   const darkMode = useSelector((state) => state.theme.darkMode);
@@ -29,28 +29,28 @@ const App = () => {
         <Route
           path="/verfiy/otp"
           element={
-            // <ProtectedRoute>
-            <OtpVerfiy />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <OtpVerfiy />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/complete-profile"
           element={
-            // <ProtectedRoute>
-            <ProfileCompletingPage />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <ProfileCompletingPage />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/profile"
           element={
-            // <ProtectedRoute>
-            <ProfilePage />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
           }
         />
-        <Route path="/discover" element={<Discover />} />
+        <Route path="/discover" element={<DisCover />} />
         <Route path="/banner" element={<BannerManagement />} />
       </Routes>
 
