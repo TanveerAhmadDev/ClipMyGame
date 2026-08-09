@@ -11,7 +11,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import SignInPage from "./pages/SignInPage";
 import ProfilePage from "./pages/ProfilePage";
 import BannerManagement from "./pages/BannerManagement";
-import DisCover from "./pages/DisCover";
+// import DisCover from "./pages/DisCover";
 
 const App = () => {
   const darkMode = useSelector((state) => state.theme.darkMode);
@@ -50,7 +50,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/discover" element={<DisCover />} />
+        {/* <Route path="/discover" element={<DisCover />} /> */}
         <Route path="/banner" element={<BannerManagement />} />
       </Routes>
 
