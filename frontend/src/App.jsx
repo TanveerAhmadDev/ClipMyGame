@@ -1,0 +1,62 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import SignUpPage from "./pages/SignUpPage";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ProfileCompletingPage from "./pages/ProfileCompletingPage";
+import OtpVerfiy from "./pages/OtpVerfiy";
+import ProtectedRoute from "./ProtectedRoute";
+import SignInPage from "./pages/SignInPage";
+import ProfilePage from "./pages/ProfilePage";
+import Discover from "./pages/discover";
+import BannerManagement from "./pages/BannerManagement";
+
+const App = () => {
+  const darkMode = useSelector((state) => state.theme.darkMode);
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/signin" element={<SignInPage />} />
+        <Route
+          path="/verfiy/otp"
+          element={
+            // <ProtectedRoute>
+            <OtpVerfiy />
+            // </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/complete-profile"
+          element={
+            // <ProtectedRoute>
+            <ProfileCompletingPage />
+            // </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            // <ProtectedRoute>
+            <ProfilePage />
+            // </ProtectedRoute>
+          }
+        />
+        <Route path="/discover" element={<Discover />} />
+        <Route path="/banner" element={<BannerManagement />} />
+      </Routes>
+
+      <ToastContainer position="top-right" autoClose={2500} theme="colored" />
+    </>
+  );
+};
+
+export default App;
