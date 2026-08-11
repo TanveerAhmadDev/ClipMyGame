@@ -86,9 +86,9 @@ export const login = asyncHandler(async (req, res, next) => {
   await userChecking.save();
 
   res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    sameSite: "none",
-    secure: true,
+    // httpOnly: true,
+    // sameSite: "none",
+    // secure: true,
     maxAge: 15 * 60 * 1000,
   });
 
