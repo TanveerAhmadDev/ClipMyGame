@@ -15,15 +15,11 @@ const app = express();
 
 app.use(
   cors({
-<<<<<<< HEAD
     origin: [
       "http://localhost:5173",
       "http://192.168.0.106:5173",
       "https://clip-my-game-rho.vercel.app",
     ],
-=======
-    origin: ["http://localhost:5173", "http://192.168.3.106:5173","https://clip-my-game-rho.vercel.app"],
->>>>>>> cb7fd2a4b1726d363ff8a95cf2245498187993b5
     credentials: true,
   }),
 );
