@@ -200,13 +200,15 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
 
   const newAccessToken = accessTokenGenerator(user._id);
 
-  res.cookie("accessToken", newAccessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 15 * 60 * 1000,
-  });
+const isProduction = process.env.NODE_ENV === "production";
 
+res.cookie("accessToken", newAccessToken, {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
+  path: "/",
+  maxAge: 15 * 60 * 1000,
+});
   res.status(200).json({
     success: true,
   });
