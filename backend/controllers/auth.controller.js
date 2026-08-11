@@ -85,19 +85,23 @@ export const login = asyncHandler(async (req, res, next) => {
   userChecking.refreshToken = refreshToken;
   await userChecking.save();
 
-  res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 15 * 60 * 1000,
-  });
+ const isProduction = process.env.NODE_ENV === "production";
 
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
+res.cookie("accessToken", accessToken, {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
+  path: "/",
+  maxAge: 15 * 60 * 1000,
+});
+
+res.cookie("refreshToken", refreshToken, {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
 
   res
     .status(200)
