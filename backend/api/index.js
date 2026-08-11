@@ -31,6 +31,14 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/api/debug/cookies", (req, res) => {
+  console.log("Cookies received:", req.cookies);
+
+  res.json({
+    cookies: req.cookies,
+  });
+});
+
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/athlete", athleteRouter);
