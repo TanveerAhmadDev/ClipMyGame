@@ -15,7 +15,7 @@ const app = express();
 
 app.use(
   cors({
-    origin:("https://clip-my-game-rho.vercel.app")
+    origin:"https://clip-my-game-rho.vercel.app"
   ,
     credentials: true,
   }),
