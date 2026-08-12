@@ -81,10 +81,13 @@ export const login = asyncHandler(async (req, res) => {
 
   const accessToken = accessTokenGenerator(userChecking._id);
 
-  res.cookie("accessToken", accessToken, {
-    httpOnly: true,
-    maxAge: 15 * 60 * 10000,
-  });
+res.cookie("accessToken", accessToken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  path: "/",
+  maxAge: 15 * 60 * 1000,
+});
 
   res
     .status(200)
