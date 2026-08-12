@@ -5,9 +5,9 @@ import apiResponse from "../utils/apiResponse.js";
 import athleteModel from "../models/athlete.model.js";
 
 export const createAthleteProfile = asyncHandler(async (req, res) => {
-  const userId = req.userId;
+  const user = req.user;
 
-  console.log(userId);
+  const userId = user._id;
 
   const {
     sport,
@@ -48,4 +48,3 @@ export const createAthleteProfile = asyncHandler(async (req, res) => {
       new apiResponse(201, "Athlete profile created successfully.", athlete),
     );
 });
-
