@@ -39,7 +39,7 @@ const BasicInformation = ({
 
   const countries = Country.getAllCountries();
   const selectedCountry = Country.getAllCountries().find(
-    (c) => c.name === user?.location?.country,
+    (c) => c.name === profileData?.location?.country,
   );
 
   const states = selectedCountry
@@ -194,7 +194,7 @@ const BasicInformation = ({
         value={profileData?.location?.district}
         onChange={(e) => updateLocation("district", e.target.value)}
         options={states.map((state) => state.name)}
-        disabled={!user?.location?.country}
+        disabled={profileData?.location?.country}
       />
       <button
         type="button"

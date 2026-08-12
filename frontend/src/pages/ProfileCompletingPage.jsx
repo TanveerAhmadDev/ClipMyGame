@@ -5,6 +5,7 @@ import SportsInformation from "../components/onboarding/SportsInformation";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setUserData } from "../features/auth/authSlice";
+import api from "../utils/axios";
 
 const ProfileCompletingPage = () => {
   const [step, setStep] = useState(1);
@@ -62,9 +63,7 @@ const ProfileCompletingPage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await axios.get("http://localhost:8080/api/user/me", {
-          withCredentials: true,
-        });
+        const { data } = await api.get("/user/me");
 
         dispatch(setUserData(data.data));
       } catch (err) {
