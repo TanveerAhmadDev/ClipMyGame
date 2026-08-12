@@ -180,12 +180,15 @@ export const optResend = asyncHandler(async (req, res) => {
 });
 
 export const refreshAccessToken = asyncHandler(async (req, res) => {
+   console.log("========== REFRESH ==========");
+  console.log("Cookies:", req.cookies);
+
   const refreshToken = req.cookies.refreshToken;
 
   if (!refreshToken) {
+    console.log("❌ NO REFRESH TOKEN");
     throw new apiError(401, "Unauthorized");
   }
-
   const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
   const user = await userModel.findById(decoded.userId);
