@@ -9,23 +9,49 @@ const SignInPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [message, setMessage] = useState("");
 
   const isFormCompleted = email.trim() !== "" && password.trim() !== "";
+
+  // const loginHandler = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!isFormCompleted) return;
+
+  //   const result = await api
+  //     .post("/auth/signin", { email, password })
+  //     .then((res) => {
+  //       console.log(res);
+  //       navigate("/");
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const loginHandler = async (e) => {
     e.preventDefault();
 
     if (!isFormCompleted) return;
 
-    const result = await api
-      .post("/auth/signin", { email, password })
-      .then((res) => {
-        console.log(res);
-        navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
+    try {
+      const response = await api.post("/auth/signin", {
+        email,
+        password,
       });
+
+      const { accessToken, user } = response.data.data;
+
+      localStorage.setItem("accessToken", accessToken);
+
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+
+      const message = error.response?.data?.message || "Login failed";
+
+      setMessage(message);
+    }
   };
 
   return (
@@ -112,6 +138,12 @@ const SignInPage = () => {
               Forgot Password?
             </Link>
           </div>
+
+          {message && (
+            <>
+              <p className="text-red-600">{message}</p>
+            </>
+          )}
 
           {/* Login Button */}
           <button

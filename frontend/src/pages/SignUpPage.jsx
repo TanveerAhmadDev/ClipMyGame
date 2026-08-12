@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../features/auth/authSlice";
+import api from "../utils/axios";
 
 const SignUpPage = () => {
   const [email, setEmail] = useState("");
@@ -22,7 +23,7 @@ const SignUpPage = () => {
     if (!isFormCompleted) return;
 
     try {
-      const res = await axios.post("http://localhost:8080/api/auth/register", {
+      const res = await api.post("/auth/register", {
         email,
         password,
         userName,
