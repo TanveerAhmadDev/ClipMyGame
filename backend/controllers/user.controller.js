@@ -9,7 +9,9 @@ import jwt from "jsonwebtoken";
 import fs from "fs";
 
 export const userData = asyncHandler(async (req, res) => {
-  const user = await userModel.findById(req.userId).select("-password");
+  const user = req.user;
+
+  console.log(user);
 
   if (user.isProfileCompleted == false) {
     throw new apiError(402, "Complete Your profile First");

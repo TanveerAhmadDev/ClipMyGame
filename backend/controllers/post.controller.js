@@ -167,7 +167,9 @@ export const getPosts = asyncHandler(async (req, res) => {
 });
 
 export const getPost = asyncHandler(async (req, res) => {
-  const userId = req.userId;
+  const user = req.user;
+
+  const userId = user._id;
 
   const posts = await postModel
     .find({ userId })

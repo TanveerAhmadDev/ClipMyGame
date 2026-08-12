@@ -14,7 +14,15 @@ api.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error),
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("accessToken");
+
+      window.location.replace("/signin");
+    }
+
+    return Promise.reject(error);
+  },
 );
 
 export default api;
