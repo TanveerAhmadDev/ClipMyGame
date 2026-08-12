@@ -59,7 +59,7 @@ export const register = asyncHandler(async (req, res) => {
     .json(new apiResponse(201, "OTP sent successfully.", userData));
 });
 
-export const login = asyncHandler(async (req, res, next) => {
+export const login = asyncHandler(async (req, res) => {
   let { email, password } = req.body;
 
   email = email.trim().toLowerCase();
@@ -67,12 +67,12 @@ export const login = asyncHandler(async (req, res, next) => {
   const userChecking = await userModel.findOne({ email });
 
   if (!userChecking) {
-    throw new apiError(403, "user not found");
+    throw new apiError(403, "User not found");
   }
 
   const passwordChecking = await bcrypt.compare(
     password,
-    userChecking.password,
+    userChecking.password
   );
 
   if (!passwordChecking) {
@@ -80,32 +80,24 @@ export const login = asyncHandler(async (req, res, next) => {
   }
 
   const accessToken = accessTokenGenerator(userChecking._id);
-  const refreshToken = refreshTokenGenerator(userChecking._id);
 
-  userChecking.refreshToken = refreshToken;
-  await userChecking.save();
+  const isProduction = process.env.NODE_ENV === "production";
 
- const isProduction = process.env.NODE_ENV === "production";
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    path: "/",
+    maxAge: 15 * 60 * 1000,
+  });
 
-res.cookie("accessToken", accessToken, {
-  httpOnly: true,
-  secure: isProduction,
-  sameSite: isProduction ? "none" : "lax",
-  path: "/",
-  maxAge: 15 * 60 * 1000,
-});
-
-res.cookie("refreshToken", refreshToken, {
-  httpOnly: true,
-  secure: isProduction,
-  sameSite: isProduction ? "none" : "lax",
-  path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
-
-  res
-    .status(200)
-    .json(new apiResponse(201, "User login successfully.", userChecking));
+  res.status(200).json(
+    new apiResponse(
+      200,
+      "User login successfully.",
+      userChecking
+    )
+  );
 });
 
 export const verifyOtp = asyncHandler(async (req, res) => {
@@ -179,41 +171,41 @@ export const optResend = asyncHandler(async (req, res) => {
   return res.status(200).json(new apiResponse(200, "OTP resent successfully"));
 });
 
-export const refreshAccessToken = asyncHandler(async (req, res) => {
-   console.log("========== REFRESH ==========");
-  console.log("Cookies:", req.cookies);
+// export const refreshAccessToken = asyncHandler(async (req, res) => {
+//    console.log("========== REFRESH ==========");
+//   console.log("Cookies:", req.cookies);
 
-  const refreshToken = req.cookies.refreshToken;
+//   const refreshToken = req.cookies.refreshToken;
 
-  if (!refreshToken) {
-    console.log("❌ NO REFRESH TOKEN");
-    throw new apiError(401, "Unauthorized");
-  }
-  const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+//   if (!refreshToken) {
+//     console.log("❌ NO REFRESH TOKEN");
+//     throw new apiError(401, "Unauthorized");
+//   }
+//   const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-  const user = await userModel.findById(decoded.userId);
+//   const user = await userModel.findById(decoded.userId);
 
-  if (!user) {
-    throw new apiError(401, "User not found");
-  }
+//   if (!user) {
+//     throw new apiError(401, "User not found");
+//   }
 
-  if (user.refreshToken !== refreshToken) {
-    throw new apiError(401, "Invalid refresh token");
-  }
+//   if (user.refreshToken !== refreshToken) {
+//     throw new apiError(401, "Invalid refresh token");
+//   }
 
-  const newAccessToken = accessTokenGenerator(user._id);
+//   const newAccessToken = accessTokenGenerator(user._id);
 
-const isProduction = process.env.NODE_ENV === "production";
+// const isProduction = process.env.NODE_ENV === "production";
 
-res.cookie("accessToken", newAccessToken, {
-  httpOnly: true,
-  secure: isProduction,
-  sameSite: isProduction ? "none" : "lax",
-  path: "/",
-  maxAge: 15 * 60 * 1000,
-});
+// res.cookie("accessToken", newAccessToken, {
+//   httpOnly: true,
+//   secure: isProduction,
+//   sameSite: isProduction ? "none" : "lax",
+//   path: "/",
+//   maxAge: 15 * 60 * 1000,
+// });
 
-  res.status(200).json({
-    success: true,
-  });
-});
+//   res.status(200).json({
+//     success: true,
+//   });
+// });
