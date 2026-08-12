@@ -13,6 +13,6 @@ authRouter.post("/register", register);
 authRouter.post("/signin", login);
 authRouter.post("/verfiy/account", verifyOtp);
 authRouter.post("/resendotp", optResend);
-authRouter.post("/refresh-token", refreshAccessToken);
+// authRouter.post("/refresh-token", refreshAccessToken);
 
 export default authRouter;
