@@ -4,6 +4,7 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
+// Add access token to every request
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
@@ -15,9 +16,18 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  },
+);
+
+// Handle expired/invalid token
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem("accessToken");
-
       window.location.replace("/signin");
     }
 
