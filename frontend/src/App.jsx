@@ -50,7 +50,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        {/* <Route path="/discover" element={<DisCover />} /> */}
         <Route path="/banner" element={<BannerManagement />} />
       </Routes>
 

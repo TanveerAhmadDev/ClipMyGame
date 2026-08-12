@@ -72,7 +72,7 @@ export const login = asyncHandler(async (req, res) => {
 
   const passwordChecking = await bcrypt.compare(
     password,
-    userChecking.password
+    userChecking.password,
   );
 
   if (!passwordChecking) {
@@ -81,23 +81,14 @@ export const login = asyncHandler(async (req, res) => {
 
   const accessToken = accessTokenGenerator(userChecking._id);
 
-  const isProduction = process.env.NODE_ENV === "production";
-
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? "none" : "lax",
-    path: "/",
-    maxAge: 15 * 60 * 1000,
+    maxAge: 15 * 60 * 10000,
   });
 
-  res.status(200).json(
-    new apiResponse(
-      200,
-      "User login successfully.",
-      userChecking
-    )
-  );
+  res
+    .status(200)
+    .json(new apiResponse(200, "User login successfully.", userChecking));
 });
 
 export const verifyOtp = asyncHandler(async (req, res) => {
