@@ -10,14 +10,14 @@ const errorHandler = (err, req, res, next) => {
     }
   }
 
-  if (process.env.NODE_ENV === "dev") {
+  if (process.env.NODE_ENV === "development") {
     console.log(err);
   }
 
   res.status(err.statusCode || 500).json({
     success: false,
     message: err.message || "Something went wrong",
-    stack: process.env.NODE_ENV === "dev" ? err.stack : undefined,
+    stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
   });
 };
 

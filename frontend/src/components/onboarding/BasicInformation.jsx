@@ -38,8 +38,8 @@ const BasicInformation = ({
   ];
 
   const countries = Country.getAllCountries();
-  const selectedCountry = Country.getAllCountries().find(
-    (c) => c.name === profileData?.location?.country,
+  const selectedCountry = countries.find(
+    (country) => country.name === profileData?.location?.country,
   );
 
   const states = selectedCountry
@@ -72,7 +72,7 @@ const BasicInformation = ({
       data?.dateOfBirth &&
       data?.gender &&
       data?.location?.country &&
-      data?.location?.district,
+      data?.location?.state,
     );
   const [profileImage, setProfileImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(
@@ -92,16 +92,6 @@ const BasicInformation = ({
     setPreviewImage(URL.createObjectURL(file));
   };
 
-  const updateLocation = (field, value) => {
-    setProfileData((prev) => ({
-      ...prev,
-      location: {
-        ...prev.location,
-        [field]: value,
-      },
-    }));
-  };
-
   useEffect(() => {
     if (!user) return;
 
@@ -114,6 +104,11 @@ const BasicInformation = ({
       },
     });
   }, [user]);
+
+  useEffect(() => {
+    console.log(profileData);
+  }, [profileData]);
+
   return (
     <div className="p-10">
       <div className="flex justify-center">
@@ -183,18 +178,39 @@ const BasicInformation = ({
         icon={Globe}
         label="Country"
         type="select"
-        value={profileData?.location.country}
-        onChange={(e) => updateLocation("country", e.target.value)}
+        value={profileData?.location?.country || ""}
+        onChange={(e) => {
+          const country = e.target.value;
+
+          setProfileData((prev) => ({
+            ...prev,
+            location: {
+              ...prev.location,
+              country,
+              state: "",
+              district: "",
+            },
+          }));
+        }}
         options={countries.map((country) => country.name)}
       />
       <InputField
         icon={MapPinned}
-        label="District / State"
+        label="State / Province"
         type="select"
-        value={profileData?.location?.district}
-        onChange={(e) => updateLocation("district", e.target.value)}
+        value={profileData?.location?.state || ""}
+        onChange={(e) => {
+          setProfileData((prev) => ({
+            ...prev,
+            location: {
+              ...prev.location,
+              state: e.target.value,
+              district: "",
+            },
+          }));
+        }}
         options={states.map((state) => state.name)}
-        disabled={profileData?.location?.country}
+        disabled={!profileData?.location?.country}
       />
       <button
         type="button"

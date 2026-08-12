@@ -129,6 +129,7 @@ const SignInPage = () => {
             />
           </div>
 
+          {message && <p className="text-red-500">{message}</p>}
           {/* Forgot Password */}
           <div className="mt-4 flex justify-end">
             <Link
@@ -138,12 +139,6 @@ const SignInPage = () => {
               Forgot Password?
             </Link>
           </div>
-
-          {message && (
-            <>
-              <p className="text-red-600">{message}</p>
-            </>
-          )}
 
           {/* Login Button */}
           <button

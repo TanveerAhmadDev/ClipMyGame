@@ -11,6 +11,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import SignInPage from "./pages/SignInPage";
 import ProfilePage from "./pages/ProfilePage";
 import BannerManagement from "./pages/BannerManagement";
+import AuthInitializer from "./AuthInitializer";
 // import DisCover from "./pages/DisCover";
 
 const App = () => {
@@ -22,37 +23,38 @@ const App = () => {
   }, [darkMode]);
   return (
     <>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/signin" element={<SignInPage />} />
-        <Route
-          path="/verfiy/otp"
-          element={
-            <ProtectedRoute>
-              <OtpVerfiy />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/complete-profile"
-          element={
-            <ProtectedRoute>
-              <ProfileCompletingPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/banner" element={<BannerManagement />} />
-      </Routes>
-
+      <AuthInitializer>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/signin" element={<SignInPage />} />
+          <Route
+            path="/verfiy/otp"
+            element={
+              <ProtectedRoute>
+                <OtpVerfiy />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/complete-profile"
+            element={
+              <ProtectedRoute>
+                <ProfileCompletingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/banner" element={<BannerManagement />} />
+        </Routes>
+      </AuthInitializer>
       <ToastContainer position="top-right" autoClose={2500} theme="colored" />
     </>
   );

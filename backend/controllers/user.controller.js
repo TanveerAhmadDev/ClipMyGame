@@ -23,7 +23,9 @@ export const userData = asyncHandler(async (req, res) => {
 });
 
 export const completeBasicInformation = asyncHandler(async (req, res) => {
-  const user = await userModel.findById(req.userId);
+  const user = req.user;
+
+  console.log(user);
 
   if (!user) {
     throw new apiError(404, "User not found");

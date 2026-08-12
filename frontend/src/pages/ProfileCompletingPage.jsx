@@ -3,7 +3,6 @@ import BasicInformation from "../components/onboarding/BasicInformation";
 import ContactInformation from "../components/onboarding/ContactInformation";
 import SportsInformation from "../components/onboarding/SportsInformation";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { setUserData } from "../features/auth/authSlice";
 import api from "../utils/axios";
 
@@ -59,22 +58,6 @@ const ProfileCompletingPage = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.auth.user);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data } = await api.get("/user/me");
-
-        dispatch(setUserData(data.data));
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchUser();
-  }, [dispatch]);
-
-  console.log(user);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-zinc-950 py-10 px-5">

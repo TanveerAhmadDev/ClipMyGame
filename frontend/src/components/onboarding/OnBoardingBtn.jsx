@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import api from "../../utils/axios";
 
 const OnBoardingBtn = ({
   step,
@@ -13,25 +14,19 @@ const OnBoardingBtn = ({
   const [submitting, setSubmitting] = useState(false);
 
   const roleRoutes = {
-    Athlete: "/api/athlete/me",
-    Coach: "/api/coach/me",
-    Scout: "/api/scout/me",
-    Referee: "/api/referee/me",
-    Agent: "/api/agent/me",
-    TeamOfficial: "/api/team-official/me",
+    Athlete: "/athlete/me",
+    Coach: "/coach/me",
+    Scout: "/scout/me",
+    Referee: "/referee/me",
+    Agent: "/agent/me",
+    TeamOfficial: "/team-official/me",
   };
 
   const basicInfoUpdateHandler = async () => {
     try {
       setSubmitting(true);
 
-      const result = await axios.patch(
-        "http://localhost:8080/api/user/me/basic-information",
-        formData,
-        {
-          withCredentials: true,
-        },
-      );
+      const result = await api.patch("/user/me/basic-information", formData);
 
       return result.data;
     } catch (error) {
@@ -54,13 +49,7 @@ const OnBoardingBtn = ({
         throw new Error("Invalid user role");
       }
 
-      const { data } = await axios.patch(
-        `http://localhost:8080${endpoint}`,
-        roleData,
-        {
-          withCredentials: true,
-        },
-      );
+      const { data } = await api.patch(`${endpoint}`, roleData);
 
       return data;
     } catch (error) {
