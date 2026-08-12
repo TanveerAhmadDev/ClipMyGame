@@ -79,7 +79,7 @@ export const completeBasicInformation = asyncHandler(async (req, res) => {
 });
 
 export const coverImage = asyncHandler(async (req, res) => {
-  const user = await userModel.findById(req.userId);
+  const user = req.user;
 
   if (!user) {
     throw new apiError(404, "User not found");
@@ -106,7 +106,7 @@ export const coverImage = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, "Cover photo Uploaded.", user));
 });
 export const profilePhoto = asyncHandler(async (req, res) => {
-  const user = await userModel.findById(req.userId);
+  const user = req.user;
 
   if (!user) {
     throw new apiError(404, "User not found");
