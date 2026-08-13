@@ -120,7 +120,8 @@ const SearchBar = ({ className }) => {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search athletes, coaches, teams..."
           className="
-          w-90
+          md:w-90
+          w-75
           h-11
           rounded-full
           bg-zinc-100

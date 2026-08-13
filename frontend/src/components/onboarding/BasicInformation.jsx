@@ -42,7 +42,7 @@ const BasicInformation = ({
     (country) => country.name === profileData?.location?.country,
   );
 
-  const states = selectedCountry
+  const district = selectedCountry
     ? State.getStatesOfCountry(selectedCountry.isoCode)
     : [];
 
@@ -72,7 +72,7 @@ const BasicInformation = ({
       data?.dateOfBirth &&
       data?.gender &&
       data?.location?.country &&
-      data?.location?.state,
+      data?.location?.district,
     );
   const [profileImage, setProfileImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(
@@ -97,10 +97,16 @@ const BasicInformation = ({
 
     setProfileData({
       ...user,
+
       dateOfBirth: user.dateOfBirth?.split("T")[0] || "",
+
       location: {
         country: user.location?.country || "",
         district: user.location?.district || "",
+        gps: {
+          latitude: user.location?.gps?.latitude || null,
+          longitude: user.location?.gps?.longitude || null,
+        },
       },
     });
   }, [user]);
@@ -196,20 +202,19 @@ const BasicInformation = ({
       />
       <InputField
         icon={MapPinned}
-        label="State / Province"
+        label="District / Province"
         type="select"
-        value={profileData?.location?.state || ""}
+        value={profileData?.location?.district || ""}
         onChange={(e) => {
           setProfileData((prev) => ({
             ...prev,
             location: {
               ...prev.location,
-              state: e.target.value,
-              district: "",
+              district: e.target.value,
             },
           }));
         }}
-        options={states.map((state) => state.name)}
+        options={district.map((district) => district.name)}
         disabled={!profileData?.location?.country}
       />
       <button

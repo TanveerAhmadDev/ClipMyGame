@@ -11,8 +11,6 @@ import fs from "fs";
 export const userData = asyncHandler(async (req, res) => {
   const user = req.user;
 
-  console.log(user);
-
   if (user.isProfileCompleted == false) {
     throw new apiError(402, "Complete Your profile First");
   }
@@ -24,8 +22,6 @@ export const userData = asyncHandler(async (req, res) => {
 
 export const completeBasicInformation = asyncHandler(async (req, res) => {
   const user = req.user;
-
-  console.log(user);
 
   if (!user) {
     throw new apiError(404, "User not found");

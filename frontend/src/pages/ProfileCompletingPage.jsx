@@ -16,6 +16,7 @@ const ProfileCompletingPage = () => {
     gender: "",
     location: {
       country: "",
+      state: "",
       district: "",
       gps: {
         latitude: null,
@@ -114,6 +115,7 @@ const ProfileCompletingPage = () => {
             formData={formData}
           />
         )}
+        {step === 4 && <div>a</div>}
       </div>
     </div>
   );

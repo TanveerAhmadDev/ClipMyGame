@@ -66,6 +66,9 @@ const OnBoardingBtn = ({
         toast.success("Basic Inforrmation send");
         await roleInfoUpdateHandler();
         toast.success("Sport Inforrmation send");
+        setTimeout(() => {
+          setStep(4);
+        }, 1000);
       } catch (err) {
         console.error(err);
         toast.error("Some thing went wrong");
