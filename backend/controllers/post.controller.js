@@ -8,6 +8,10 @@ import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 export const createPost = asyncHandler(async (req, res) => {
   const { caption = "", visibility = "Public" } = req.body;
 
+  const user = req.user;
+
+  const userId = user._id;
+
   const metadata = JSON.parse(req.body.metadata || "{}");
 
   const {
@@ -41,7 +45,7 @@ export const createPost = asyncHandler(async (req, res) => {
   }
 
   const post = await postModel.create({
-    userId: req.userId,
+    userId,
     caption,
     visibility,
     media,
