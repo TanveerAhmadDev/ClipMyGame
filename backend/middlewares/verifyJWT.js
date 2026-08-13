@@ -6,20 +6,32 @@ const verifyJWT = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
-    console.log(authHeader);
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      throw new apiError(401, "Unauthorized");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return next(new apiError(401, "Unauthorized"));
     }
 
     const token = authHeader.split(" ")[1];
 
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    let decoded;
+
+    try {
+      decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    } catch (error) {
+      if (error.name === "TokenExpiredError") {
+        return next(new apiError(401, "Access token expired"));
+      }
+
+      if (error.name === "JsonWebTokenError") {
+        return next(new apiError(401, "Invalid access token"));
+      }
+
+      return next(error);
+    }
 
     const user = await userModel.findById(decoded.userId);
 
     if (!user) {
-      throw new apiError(401, "User not found");
+      return next(new apiError(401, "User not found"));
     }
 
     req.user = user;

@@ -44,7 +44,7 @@ export const register = asyncHandler(async (req, res) => {
 
   await newUser.save();
 
-  if (!process.env.NODE_ENV === "dev") {
+  if (process.env.NODE_ENV === "production") {
     await sendOtpEmail(newUser.email, otp);
   }
 

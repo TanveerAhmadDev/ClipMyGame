@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import api from "../utils/axios";
 
 const OtpVerify = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -59,14 +60,10 @@ const OtpVerify = () => {
     }
 
     try {
-      const res = await axios.post(
-        "http://localhost:8080/api/auth/verfiy/account",
-        {
-          email: user.email,
-          otp: code,
-        },
-        { withCredentials: true },
-      );
+      const res = await api.post("/auth/verfiy/account", {
+        email: user.email,
+        otp: code,
+      });
 
       toast.success(res.data.message);
 
@@ -80,7 +77,7 @@ const OtpVerify = () => {
 
   const otpResendHandler = async () => {
     try {
-      const res = await axios.post("http://localhost:8080/api/auth/resendotp", {
+      const res = await api.post("/auth/resendotp", {
         email: user.email,
       });
       console.log(res);

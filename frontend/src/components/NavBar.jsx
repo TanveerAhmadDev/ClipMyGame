@@ -30,14 +30,14 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className=" fixed bottom-0 border-t md:sticky md:top-0 md:border-b z-50 bg-white dark:bg-[#1E1E1E]  border-gray-200 dark:border-zinc-700 shadow-sm transition-colors duration-300">
-        <div className="max-w-7xl mx-auto h-16 px-6 flex items-center justify-between">
-          {/* Left */}
-          <div className="flex items-center gap-4">
+      {/* <nav className="w-full max-w-full  fixed bottom-0 border-t md:sticky md:top-0 md:border-b z-50 bg-white dark:bg-[#1E1E1E]  border-gray-200 dark:border-zinc-700 shadow-sm transition-colors duration-300"> */}
+      <nav className="w-full max-w-full md:px-30 overflow-x-hidden fixed bottom-0 border-t md:sticky md:top-0 md:border-b z-50 bg-white dark:bg-[#1E1E1E] border-gray-200 dark:border-zinc-700 shadow-sm transition-colors duration-300">
+        <div className="w-full max-w-full mx-auto h-16 px-6 flex items-center justify-between min-w-0 overflow-hidden">
+          <div className="flex items-center gap-4 min-w-0">
             <img
               src="/eeimg.png"
               alt="ClipMyGame"
-              className="w-12"
+              className="w-12 hidden md:block"
               onClick={() => navigate("/")}
             />
 
@@ -46,8 +46,7 @@ const NavBar = () => {
             </div>
           </div>
 
-          {/* Right */}
-          <div className="flex items-center gap-8 text-gray-600 dark:text-gray-300">
+          <div className="flex items-center gap-8 text-gray-600 dark:text-gray-300 w-full max-w-full md:w-auto md:max-w-none">
             {navItems.map((item) => (
               <NavItem
                 key={item.path}
@@ -62,9 +61,9 @@ const NavBar = () => {
               image={user?.profilePhoto || "https://i.pravatar.cc/150?img=12"}
               label="Profile"
               onClick={() => navigate("/profile")}
+              className={"hidden md:block"}
             />
 
-            {/* Theme Toggle */}
             <button
               onClick={() => dispatch(toggleTheme())}
               className={`hidden md:block relative w-14 h-8 rounded-full transition-all duration-300 ${
@@ -87,24 +86,28 @@ const NavBar = () => {
         </div>
       </nav>
 
-      <nav className="md:sticky md:top-0 md:border-b md:hidden z-50 bg-white dark:bg-[#1E1E1E] border-gray-200 dark:border-zinc-700 shadow-sm transition-colors duration-300">
-        <div className="max-w-7xl mx-auto h-16 px-3 flex items-center justify-between">
+      <nav className="w-full max-w-full overflow-hidden md:sticky md:top-0 md:border-b md:hidden z-50 bg-white dark:bg-[#1E1E1E] border-gray-200 dark:border-zinc-700 shadow-sm transition-colors duration-300">
+        <div className="w-full max-w-full h-16 px-3 flex items-center justify-between gap-3 overflow-hidden">
           <img
             src={
               user?.profilePhoto ||
               `https://ui-avatars.com/api/?name=${user?.userName}`
             }
             alt=""
-            className="w-10 h-10 rounded-full object-cover"
+            className="w-10 h-10 rounded-full object-cover shrink-0"
+            onClick={() => navigate("/profile")}
           />
-          <SearchBar />
+
+          <div className="min-w-0 flex-1 overflow-hidden">
+            <SearchBar />
+          </div>
         </div>
       </nav>
     </>
   );
 };
 
-const NavItem = ({ icon, image, label, active, onClick }) => {
+const NavItem = ({ icon, image, label, active, onClick, className }) => {
   return (
     <div onClick={onClick}>
       <button
@@ -112,7 +115,7 @@ const NavItem = ({ icon, image, label, active, onClick }) => {
           active
             ? "text-green-600 dark:text-green-500"
             : "text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-500"
-        }`}
+        } ${className}`}
       >
         {image ? (
           <img
