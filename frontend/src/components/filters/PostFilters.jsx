@@ -98,7 +98,7 @@ const PostFilters = ({
     setActiveFilter(key);
   };
   const handleFilterClick = (key) => {
-    setActiveFilter(key);
+    setActiveFilter((prev) => (prev === key ? null : key));
   };
 
   const renderActiveFilter = () => {

@@ -39,7 +39,9 @@ const LocationFilter = ({ filters, onUpdateFilter }) => {
 
   return (
     <div>
-      <h3 className="hidden md:block text-xl font-semibold mb-1">Location</h3>
+      <h3 className="hidden md:block text-xl font-semibold mb-1 dark:text-white">
+        Location
+      </h3>
 
       <p className="hidden md:block text-sm text-gray-500 mb-6">
         Filter posts by location.
@@ -78,7 +80,9 @@ const LocationFilter = ({ filters, onUpdateFilter }) => {
       </select>
 
       {/* State */}
-      <label className="block text-sm font-medium mb-2">State / Region</label>
+      <label className="block text-sm font-medium mb-2 dark:text-white">
+        State / Region
+      </label>
 
       <select
         value={filters?.stateCode || ""}
@@ -116,7 +120,9 @@ const LocationFilter = ({ filters, onUpdateFilter }) => {
       </select>
 
       {/* City */}
-      <label className="block text-sm font-medium mb-2">City</label>
+      <label className="block text-sm font-medium mb-2 dark:text-white">
+        City
+      </label>
 
       <select
         value={filters?.city || ""}

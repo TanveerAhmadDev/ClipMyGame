@@ -13,6 +13,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserData } from "../features/auth/authSlice.js";
 import api from "../utils/axios";
 import "react-indiana-drag-scroll/dist/style.css";
+import PostSkeleton from "../components/PostSkeleton.jsx";
+import { setPosts } from "../features/post/postSlice.js";
+import { updatePostLike } from "../features/post/postSlice.js";
+import { toast } from "react-toastify";
 const HomePage = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
@@ -27,6 +31,27 @@ const HomePage = () => {
   const { posts, loadingPosts } = usePosts(selectedFilters);
   const banners = useBannerFeed(selectedFilters.sport);
   const bannerInterval = 3;
+
+  const handleLike = async (postId) => {
+    try {
+      const { data } = await api.post(`/post/${postId}/like`);
+
+      const result = data.data;
+
+      dispatch(
+        updatePostLike({
+          postId,
+          liked: result.liked,
+          likes: result.likes,
+        }),
+      );
+    } catch (error) {
+      console.error(error);
+
+      toast.error(error.response?.data?.message || "Failed to update like.");
+    }
+  };
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -73,8 +98,10 @@ const HomePage = () => {
           {/* POSTS */}
           <div className="mt-3 space-y-5">
             {loadingPosts ? (
-              <div className="py-10 text-center text-gray-500">
-                Loading posts...
+              <div className="space-y-5">
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <PostSkeleton key={index} />
+                ))}
               </div>
             ) : posts.length === 0 ? (
               <div className="py-10 text-center text-gray-500">
@@ -83,7 +110,7 @@ const HomePage = () => {
             ) : (
               posts.map((post, index) => (
                 <React.Fragment key={post._id}>
-                  <FeedCard post={post} />
+                  <FeedCard post={post} onLike={handleLike} />
                   {/* * Banner after every * 3 posts. */}
                   {(index + 1) % bannerInterval === 0 && banners.length > 0 && (
                     <BannerCard

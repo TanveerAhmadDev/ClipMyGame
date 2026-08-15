@@ -14,7 +14,7 @@ import TimeAgo from "./TimeAgo";
 import MediaPreviewModal from "./MediaPreviewModal";
 import { useState } from "react";
 
-const FeedCard = ({ post }) => {
+const FeedCard = ({ post, onLike }) => {
   const images = post?.media?.filter((item) => item.type === "image") || [];
 
   const videos = post?.media?.filter((item) => item.type === "video") || [];
@@ -26,6 +26,9 @@ const FeedCard = ({ post }) => {
     setCurrentIndex(index);
     setPreviewOpen(true);
   };
+
+  const likes = post?.performance?.likes || 0;
+  const liked = post?.liked || false;
   return (
     <div className="bg-white mb-3 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-2xl shadow-sm overflow-hidden">
       {/* Header */}
@@ -130,7 +133,12 @@ const FeedCard = ({ post }) => {
 
       {/* Actions */}
       <div className="grid grid-cols-4">
-        <Action icon={<Heart size={20} />} label="Like" />
+        <Action
+          icon={<Heart size={20} fill={liked ? "currentColor" : "none"} />}
+          label={likes}
+          active={liked}
+          onClick={() => onLike(post._id)}
+        />
         <Action icon={<MessageCircle size={20} />} label="Comment" />
         <Action icon={<Share2 size={20} />} label="Share" />
         <Action icon={<Bookmark size={20} />} label="Save" />
@@ -146,10 +154,32 @@ const FeedCard = ({ post }) => {
   );
 };
 
-const Action = ({ icon, label }) => {
+const Action = ({ icon, label, onClick, disabled = false, active = false }) => {
   return (
-    <button className="flex items-center justify-center gap-2 py-4 hover:bg-gray-100 dark:hover:bg-zinc-800 dark:text-white transition">
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className={`
+        flex
+        items-center
+        justify-center
+        gap-2
+        py-4
+        transition
+        disabled:opacity-50
+        disabled:cursor-not-allowed
+        ${
+          active
+            ? "text-blue-600 dark:text-blue-400"
+            : "text-gray-600 dark:text-gray-300"
+        }
+        hover:bg-gray-100
+        dark:hover:bg-zinc-800
+      `}
+    >
       {icon}
+
       <span className="text-sm font-medium">{label}</span>
     </button>
   );

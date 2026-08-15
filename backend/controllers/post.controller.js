@@ -3,6 +3,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
+import postLikeModel from "../models/postLike.model.js";
 
 // Create Post
 export const createPost = asyncHandler(async (req, res) => {
@@ -62,7 +63,6 @@ export const createPost = asyncHandler(async (req, res) => {
     .status(201)
     .json(new apiResponse(201, "Post created successfully.", post));
 });
-
 // Delete Post
 export const deletePost = asyncHandler(async (req, res) => {
   const post = await postModel.findOneAndDelete({
@@ -78,7 +78,6 @@ export const deletePost = asyncHandler(async (req, res) => {
     .status(200)
     .json(new apiResponse(200, "Post deleted successfully."));
 });
-
 //Home Feed
 export const posts = asyncHandler(async (req, res) => {
   const page = Number(req.query.page) || 1;
@@ -108,130 +107,6 @@ export const posts = asyncHandler(async (req, res) => {
     }),
   );
 });
-// export const getPosts = asyncHandler(async (req, res) => {
-//   const {
-//     sport,
-//     contentType,
-//     skill,
-//     level,
-//     country,
-//     region,
-//     district,
-//     sortBy = "latest",
-//   } = req.query;
-
-//   const filter = {};
-
-//   if (sport) {
-//     filter.sport = sport;
-//   }
-
-//   if (contentType) {
-//     filter.contentType = contentType;
-//   }
-
-//   if (skill) {
-//     filter.skills = skill;
-//   }
-
-//   if (level) {
-//     filter.level = level;
-//   }
-
-//   if (country) {
-//     filter["location.country"] = country;
-//   }
-
-//   if (region) {
-//     filter["location.region"] = region;
-//   }
-
-//   if (district) {
-//     filter["location.district"] = district;
-//   }
-
-//   let sort = { createdAt: -1 };
-
-//   if (sortBy === "trending") {
-//     sort = {
-//       "performance.likes": -1,
-//       "performance.comments": -1,
-//       createdAt: -1,
-//     };
-//   }
-
-//   const posts = await postModel
-//     .find(filter)
-//     .populate("userId", "fullName userName profilePhoto")
-//     .sort(sort);
-
-//   return res
-//     .status(200)
-//     .json(new apiResponse(200, "Posts fetched successfully.", { posts }));
-// });
-
-// export const getPosts = asyncHandler(async (req, res) => {
-//   const {
-//     sport,
-//     contentType,
-//     skill,
-//     level,
-//     countryCode,
-//     stateCode,
-//     city,
-//     sortBy = "latest",
-//   } = req.query;
-
-//   const filter = {};
-
-//   if (sport) {
-//     filter.sport = sport;
-//   }
-
-//   if (contentType) {
-//     filter.contentType = contentType;
-//   }
-
-//   if (skill) {
-//     filter.skills = skill;
-//   }
-
-//   if (level) {
-//     filter.level = level;
-//   }
-
-//   // LOCATION
-//   if (countryCode) {
-//     filter["location.countryCode"] = countryCode;
-//   }
-
-//   if (stateCode) {
-//     filter["location.stateCode"] = stateCode;
-//   }
-
-//   if (city) {
-//     filter["location.city"] = city;
-//   }
-
-//   let sort = { createdAt: -1 };
-
-//   if (sortBy === "trending") {
-//     sort = {
-//       "performance.likes": -1,
-//       "performance.comments": -1,
-//       createdAt: -1,
-//     };
-//   }
-
-//   const posts = await postModel
-//     .find(filter)
-//     .populate("userId", "fullName userName profilePhoto")
-//     .sort(sort);
-
-//   return res
-//     .status(200)
-//     .json(new apiResponse(200, "Posts fetched successfully.", { posts }));
-// });
 
 export const getPosts = asyncHandler(async (req, res) => {
   const {
@@ -290,9 +165,28 @@ export const getPosts = asyncHandler(async (req, res) => {
     .populate("userId", "fullName userName profilePhoto")
     .sort(sort);
 
-  return res
-    .status(200)
-    .json(new apiResponse(200, "Posts fetched successfully.", { posts }));
+  const postIds = posts.map((post) => post._id);
+
+  const userLikes = await postLikeModel
+    .find({
+      userId: req.user._id,
+      postId: { $in: postIds },
+    })
+    .select("postId");
+
+  const likedPostIds = new Set(userLikes.map((like) => like.postId.toString()));
+
+  const formattedPosts = posts.map((post) => ({
+    ...post.toObject(),
+
+    liked: likedPostIds.has(post._id.toString()),
+  }));
+
+  return res.status(200).json(
+    new apiResponse(200, "Posts fetched successfully.", {
+      posts: formattedPosts,
+    }),
+  );
 });
 export const getPostFilters = asyncHandler(async (req, res) => {
   const sportEnum = postModel.schema.path("sport").enumValues;
@@ -340,6 +234,55 @@ export const getPost = asyncHandler(async (req, res) => {
   return res.status(200).json(
     new apiResponse(200, "Posts fetched successfully.", {
       posts,
+    }),
+  );
+});
+
+export const togglePostLike = asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+
+  const userId = req.user._id;
+
+  const post = await postModel.findById(postId);
+
+  if (!post) {
+    throw new apiError(404, "Post not found.");
+  }
+
+  const existingLike = await postLikeModel.findOne({
+    postId,
+    userId,
+  });
+
+  let liked;
+
+  if (existingLike) {
+    // Unlike
+    await postLikeModel.deleteOne({
+      _id: existingLike._id,
+    });
+
+    post.performance.likes = Math.max(0, post.performance.likes - 1);
+
+    liked = false;
+  } else {
+    // Like
+    await postLikeModel.create({
+      postId,
+      userId,
+    });
+
+    post.performance.likes += 1;
+
+    liked = true;
+  }
+
+  await post.save();
+
+  return res.status(200).json(
+    new apiResponse(200, liked ? "Post liked." : "Post unliked.", {
+      liked,
+      likes: post.performance.likes,
     }),
   );
 });

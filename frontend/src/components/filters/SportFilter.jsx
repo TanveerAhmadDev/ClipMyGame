@@ -12,7 +12,9 @@ const SportFilter = ({ filterOptions, filters, onUpdateFilter }) => {
 
   return (
     <div>
-      <h3 className="hidden md:block text-xl font-semibold mb-1">Sport</h3>
+      <h3 className="hidden md:block text-xl font-semibold mb-1 dark:text-white">
+        Sport
+      </h3>
       <p className="hidden md:block text-sm text-gray-500 mb-5">
         Select the sport you want to see.
       </p>

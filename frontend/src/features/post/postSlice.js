@@ -16,16 +16,19 @@ const postsSlice = createSlice({
       state.posts.unshift(action.payload);
     },
 
-    removePost: (state, action) => {
-      state.posts = state.posts.filter((post) => post._id !== action.payload);
-    },
+    updatePostLike: (state, action) => {
+      const { postId, liked, likes } = action.payload;
 
-    clearPosts: (state) => {
-      state.posts = [];
+      const post = state.posts.find((post) => post._id === postId);
+
+      if (post) {
+        post.liked = liked;
+        post.performance.likes = likes;
+      }
     },
   },
 });
 
-export const { setPosts, addPost, removePost, clearPosts } = postsSlice.actions;
+export const { setPosts, addPost, updatePostLike } = postsSlice.actions;
 
 export default postsSlice.reducer;
