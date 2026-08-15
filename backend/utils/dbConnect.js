@@ -1,15 +1,24 @@
 import mongoose from "mongoose";
 
 const dbConnect = async () => {
-  await mongoose
-    .connect(process.env.MONGO_URI)
-    .then(() => {
-      console.log("Database Connected");
-    })
-    .catch((err) => {
-      console.log("Database is Not Connected");
-      console.log(err);
+  try {
+    if (!process.env.MONGO_URI) {
+      throw new Error("MONGO_URI is not defined");
+    }
+
+    await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 10000,
     });
+
+    console.log("Database Connected");
+
+    return mongoose.connection;
+  } catch (error) {
+    console.error("Database is Not Connected");
+    console.error(error);
+
+    throw error;
+  }
 };
 
 export default dbConnect;

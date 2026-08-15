@@ -23,20 +23,17 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
-dbConnect();
+try {
+  await dbConnect();
+} catch (error) {
+  console.error("Failed to start application because MongoDB is unavailable.");
+  process.exit(1);
+}
 
 app.get("/", (req, res) => {
   res.json({
     success: true,
     message: "API is running",
-  });
-});
-
-app.get("/api/debug/cookies", (req, res) => {
-  console.log("Cookies received:", req.cookies);
-
-  res.json({
-    cookies: req.cookies,
   });
 });
 
