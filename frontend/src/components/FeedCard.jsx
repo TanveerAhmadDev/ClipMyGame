@@ -148,7 +148,7 @@ const FeedCard = ({ post }) => {
 
 const Action = ({ icon, label }) => {
   return (
-    <button className="flex items-center justify-center gap-2 py-4 hover:bg-gray-100 dark:hover:bg-zinc-800 transition">
+    <button className="flex items-center justify-center gap-2 py-4 hover:bg-gray-100 dark:hover:bg-zinc-800 dark:text-white transition">
       {icon}
       <span className="text-sm font-medium">{label}</span>
     </button>

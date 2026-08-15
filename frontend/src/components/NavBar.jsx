@@ -30,49 +30,50 @@ const NavBar = () => {
 
   return (
     <>
-      <nav className="w-full max-w-full md:px-30 overflow-x-hidden fixed bottom-0 border-t md:sticky md:top-0 md:border-b z-50 bg-white dark:bg-[#1E1E1E] border-gray-200 dark:border-zinc-700 shadow-sm transition-colors duration-300">
-        <div className="w-full max-w-full mx-auto h-16  px-6 flex items-center justify-between min-w-0 overflow-hidden">
-          <div className="flex items-center gap-4 min-w-0">
+      <nav className=" w-full max-w-full md:px-40 overflow-x-hidden fixed -bottom-1 md:sticky md:top-0 border-t md:border-t-0  md:border-b z-50 bg-white dark:bg-[#1E1E1E] border-gray-200 dark:border-zinc-700 shadow-sm transition-colors duration-300 ">
+        <div className=" w-full max-w-full h-16 flex items-center overflow-hidden ">
+          <div className=" hidden md:flex items-center gap-4 shrink-0 ">
             <img
               src="/eeimg.png"
               alt="ClipMyGame"
-              className="w-12 hidden md:block"
+              className="w-12 cursor-pointer"
               onClick={() => navigate("/")}
             />
-
-            <div className="relative hidden md:block">
+            <div className="relative">
               <SearchBar />
             </div>
           </div>
-
-          <div className="flex items-center justify-between gap-7 text-gray-600 dark:text-gray-300 w-full max-w-full md:w-auto md:max-w-none">
+          {/* ========================================= NAVIGATION ========================================= */}
+          <div className="flex items-center w-full md:w-auto md:gap-7 md:ml-auto h-full text-gray-600 dark:text-gray-300 ">
             {navItems.map((item) => (
-              <NavItem
+              <div
                 key={item.path}
-                icon={item.icon}
-                label={item.label}
-                active={location.pathname === item.path}
-                onClick={() => navigate(item.path)}
-              />
+                className=" flex-1 md:flex-none h-full flex items-center justify-center "
+              >
+                <NavItem
+                  icon={item.icon}
+                  label={item.label}
+                  active={location.pathname === item.path}
+                  onClick={() => navigate(item.path)}
+                />
+              </div>
             ))}
-
-            <NavItem
-              image={user?.profilePhoto || "https://i.pravatar.cc/150?img=12"}
-              label="Profile"
-              onClick={() => navigate("/profile")}
-              className={"hidden md:block"}
-            />
-
+            {/* ========================================= PROFILE — DESKTOP ONLY ========================================= */}
+            <div className=" hidden md:flex items-center justify-center ">
+              <NavItem
+                image={user?.profilePhoto || "https://i.pravatar.cc/150?img=12"}
+                label="Profile"
+                onClick={() => navigate("/profile")}
+                className={""}
+              />
+            </div>
+            {/* ========================================= THEME — DESKTOP ONLY ========================================= */}
             <button
               onClick={() => dispatch(toggleTheme())}
-              className={`hidden md:block relative w-14 h-8 rounded-full transition-all duration-300 ${
-                darkMode ? "bg-green-600" : "bg-gray-300"
-              }`}
+              className={` hidden md:block relative w-14 h-8 rounded-full transition-all duration-300 ${darkMode ? "bg-green-600" : "bg-gray-300"} `}
             >
               <div
-                className={`flex absolute top-1 w-6 h-6 rounded-full bg-white shadow-md items-center justify-center transition-all duration-300 ${
-                  darkMode ? "translate-x-7" : "translate-x-1"
-                }`}
+                className={` flex absolute top-1 w-6 h-6 rounded-full bg-white shadow-md items-center justify-center transition-all duration-300 ${darkMode ? "translate-x-7" : "translate-x-1"} `}
               >
                 {darkMode ? (
                   <Moon size={15} className="text-green-700" />
@@ -98,8 +99,18 @@ const NavBar = () => {
           />
 
           <div className="min-w-0 flex-1 overflow-hidden">
-            <SearchBar className={"w-12"} />
+            <SearchBar />
           </div>
+          <button
+            onClick={() => dispatch(toggleTheme())}
+            className={`md:hidden relative flex items-center justify-center w-8 h-8 transition-all duration-300  `}
+          >
+            {darkMode ? (
+              <Moon className="text-green-700" />
+            ) : (
+              <Sun className="text-yellow-500" />
+            )}
+          </button>
         </div>
       </nav>
     </>
@@ -120,7 +131,7 @@ const NavItem = ({ icon, image, label, active, onClick, className }) => {
           <img
             src={image}
             alt={label}
-            className="w-6 h-6 rounded-full object-cover relative left-1.5"
+            className="w-6 h-6 rounded-full object-cover"
           />
         ) : (
           icon

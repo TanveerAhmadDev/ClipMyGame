@@ -1,8 +1,12 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import api from "../utils/axios"; // your axios instance with refresh token
+import api from "../utils/axios";
+import { addPost } from "../features/post/postSlice";
 
 const useCreatePost = () => {
+  const dispatch = useDispatch();
+
   const [posting, setPosting] = useState(false);
 
   const createPost = async ({
@@ -45,10 +49,15 @@ const useCreatePost = () => {
         },
       });
 
+      const newPost = result.data.data;
+
+      // Add immediately to Redux
+      dispatch(addPost(newPost));
+
       toast.success("Post created successfully.");
 
       if (onSuccess) {
-        onSuccess(result.data.data);
+        onSuccess(newPost);
       }
 
       return result.data;

@@ -4,6 +4,7 @@ import {
   createPost,
   deletePost,
   getPost,
+  getPostFilters,
   getPosts,
   posts,
 } from "../controllers/post.controller.js";
@@ -23,5 +24,6 @@ postRouter.delete("/:id", deletePost);
 
 postRouter.get("/posts", verifyJWT, getPosts);
 postRouter.get("/getposts", verifyJWT, getPost);
+postRouter.get("/filters", getPostFilters);
 
 export default postRouter;

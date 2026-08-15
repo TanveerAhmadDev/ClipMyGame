@@ -16,25 +16,27 @@ const BannerCard = ({ banner }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-zinc-200 overflow-hidden shadow-sm">
+    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-700 overflow-hidden shadow-sm">
       <div className="flex items-center justify-between px-5 py-3 border-b">
         <div>
-          <p className="font-semibold">Sponsored</p>
+          <p className="font-semibold text-xl dark:text-white mb-2">
+            Sponsored
+          </p>
 
           <p className="text-xs text-zinc-500">Advertisement</p>
         </div>
       </div>
 
-      <img src={banner.image} className="w-full h-72 object-cover" />
+      <img src={banner.image} className="w-full h-auto object-cover" />
 
-      <div className="p-5">
-        <h2 className="font-bold text-lg">{banner.title}</h2>
+      <div className="px-5 py-3 flex flex-col">
+        <h2 className="font-bold text-lg dark:text-white">{banner.title}</h2>
 
         <p className="text-zinc-500 mt-2">{banner.description}</p>
 
         <button
           onClick={handleClick}
-          className="mt-5 flex items-center gap-2 px-5 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white"
+          className="mt-2 flex  items-center gap-2 px-5 py-3  w-fit rounded-xl bg-green-600 hover:bg-green-700 text-white"
         >
           Learn More
           <ExternalLink size={18} />

@@ -102,38 +102,6 @@ export const SORT_OPTIONS = [
   "most_discussed",
 ];
 
-export const LOCATIONS = {
-  Malawi: {
-    Northern: ["Chitipa", "Karonga", "Rumphi", "Mzimba", "Nkhata Bay"],
-
-    Central: [
-      "Lilongwe",
-      "Kasungu",
-      "Mchinji",
-      "Dowa",
-      "Ntchisi",
-      "Salima",
-      "Nkhotakota",
-    ],
-
-    Southern: [
-      "Blantyre",
-      "Zomba",
-      "Mangochi",
-      "Mulanje",
-      "Phalombe",
-      "Machinga",
-      "Nsanje",
-      "Chikwawa",
-      "Balaka",
-      "Thyolo",
-      "Chiradzulu",
-      "Mwanza",
-      "Neno",
-    ],
-  },
-};
-
 export const CATEGORY_TAGS = {
   Football: [
     "Training",

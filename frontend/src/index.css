@@ -53,3 +53,10 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.Location {
+  border: none;
+  appearance: none;
+  background: red;
+  width: 200px;
+}

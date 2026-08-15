@@ -73,9 +73,30 @@ const postSchema = new mongoose.Schema(
     },
 
     location: {
-      country: String,
-      region: String,
-      district: String,
+      countryCode: {
+        type: String,
+        default: "",
+      },
+
+      country: {
+        type: String,
+        default: "",
+      },
+
+      stateCode: {
+        type: String,
+        default: "",
+      },
+
+      state: {
+        type: String,
+        default: "",
+      },
+
+      city: {
+        type: String,
+        default: "",
+      },
     },
 
     tags: [

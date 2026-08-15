@@ -12,6 +12,7 @@ import SignInPage from "./pages/SignInPage";
 import ProfilePage from "./pages/ProfilePage";
 import BannerManagement from "./pages/BannerManagement";
 import AuthInitializer from "./AuthInitializer";
+import PageNotFound from "./pages/PageNotFound";
 // import DisCover from "./pages/DisCover";
 
 const App = () => {
@@ -53,6 +54,7 @@ const App = () => {
             }
           />
           <Route path="/banner" element={<BannerManagement />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </AuthInitializer>
       <ToastContainer position="top-right" autoClose={2500} theme="colored" />

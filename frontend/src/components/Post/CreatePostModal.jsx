@@ -58,9 +58,13 @@ const CreatePostModal = ({ open, onClose, user }) => {
     skills: [],
     level: "",
     location: {
-      country: "Malawi",
-      region: "",
-      district: "",
+      countryCode: "",
+      country: "",
+
+      stateCode: "",
+      state: "",
+
+      city: "",
     },
     tags: [],
   });

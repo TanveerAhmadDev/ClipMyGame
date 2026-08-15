@@ -108,15 +108,140 @@ export const posts = asyncHandler(async (req, res) => {
     }),
   );
 });
+// export const getPosts = asyncHandler(async (req, res) => {
+//   const {
+//     sport,
+//     contentType,
+//     skill,
+//     level,
+//     country,
+//     region,
+//     district,
+//     sortBy = "latest",
+//   } = req.query;
+
+//   const filter = {};
+
+//   if (sport) {
+//     filter.sport = sport;
+//   }
+
+//   if (contentType) {
+//     filter.contentType = contentType;
+//   }
+
+//   if (skill) {
+//     filter.skills = skill;
+//   }
+
+//   if (level) {
+//     filter.level = level;
+//   }
+
+//   if (country) {
+//     filter["location.country"] = country;
+//   }
+
+//   if (region) {
+//     filter["location.region"] = region;
+//   }
+
+//   if (district) {
+//     filter["location.district"] = district;
+//   }
+
+//   let sort = { createdAt: -1 };
+
+//   if (sortBy === "trending") {
+//     sort = {
+//       "performance.likes": -1,
+//       "performance.comments": -1,
+//       createdAt: -1,
+//     };
+//   }
+
+//   const posts = await postModel
+//     .find(filter)
+//     .populate("userId", "fullName userName profilePhoto")
+//     .sort(sort);
+
+//   return res
+//     .status(200)
+//     .json(new apiResponse(200, "Posts fetched successfully.", { posts }));
+// });
+
+// export const getPosts = asyncHandler(async (req, res) => {
+//   const {
+//     sport,
+//     contentType,
+//     skill,
+//     level,
+//     countryCode,
+//     stateCode,
+//     city,
+//     sortBy = "latest",
+//   } = req.query;
+
+//   const filter = {};
+
+//   if (sport) {
+//     filter.sport = sport;
+//   }
+
+//   if (contentType) {
+//     filter.contentType = contentType;
+//   }
+
+//   if (skill) {
+//     filter.skills = skill;
+//   }
+
+//   if (level) {
+//     filter.level = level;
+//   }
+
+//   // LOCATION
+//   if (countryCode) {
+//     filter["location.countryCode"] = countryCode;
+//   }
+
+//   if (stateCode) {
+//     filter["location.stateCode"] = stateCode;
+//   }
+
+//   if (city) {
+//     filter["location.city"] = city;
+//   }
+
+//   let sort = { createdAt: -1 };
+
+//   if (sortBy === "trending") {
+//     sort = {
+//       "performance.likes": -1,
+//       "performance.comments": -1,
+//       createdAt: -1,
+//     };
+//   }
+
+//   const posts = await postModel
+//     .find(filter)
+//     .populate("userId", "fullName userName profilePhoto")
+//     .sort(sort);
+
+//   return res
+//     .status(200)
+//     .json(new apiResponse(200, "Posts fetched successfully.", { posts }));
+// });
+
 export const getPosts = asyncHandler(async (req, res) => {
   const {
     sport,
     contentType,
     skill,
     level,
-    country,
-    region,
-    district,
+    countryCode,
+    stateCode,
+    city,
     sortBy = "latest",
   } = req.query;
 
@@ -138,16 +263,16 @@ export const getPosts = asyncHandler(async (req, res) => {
     filter.level = level;
   }
 
-  if (country) {
-    filter["location.country"] = country;
+  if (countryCode) {
+    filter["location.countryCode"] = countryCode;
   }
 
-  if (region) {
-    filter["location.region"] = region;
+  if (stateCode) {
+    filter["location.stateCode"] = stateCode;
   }
 
-  if (district) {
-    filter["location.district"] = district;
+  if (city) {
+    filter["location.city"] = city;
   }
 
   let sort = { createdAt: -1 };
@@ -168,6 +293,38 @@ export const getPosts = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new apiResponse(200, "Posts fetched successfully.", { posts }));
+});
+export const getPostFilters = asyncHandler(async (req, res) => {
+  const sportEnum = postModel.schema.path("sport").enumValues;
+
+  const levelEnum = postModel.schema.path("level").enumValues;
+
+  const skills = await postModel.distinct("skills");
+
+  const contentTypes = postModel.schema.path("contentType").enumValues;
+
+  const countries = await postModel.distinct("location.country");
+
+  const states = await postModel.distinct("location.state");
+
+  const cities = await postModel.distinct("location.city");
+
+  const result = {
+    sports: sportEnum,
+    levels: levelEnum,
+    skills,
+    contentTypes,
+
+    locations: {
+      countries: countries.filter(Boolean).sort(),
+      states: states.filter(Boolean).sort(),
+      cities: cities.filter(Boolean).sort(),
+    },
+  };
+
+  return res
+    .status(200)
+    .json(new apiResponse(200, "Post filters fetched successfully.", result));
 });
 
 export const getPost = asyncHandler(async (req, res) => {

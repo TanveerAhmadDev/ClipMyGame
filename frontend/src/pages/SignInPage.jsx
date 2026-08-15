@@ -175,7 +175,7 @@ const SignInPage = () => {
           </button>
 
           <p className="mt-8 text-center text-gray-500 dark:text-gray-400">
-            Don't have an account?{" "}
+            Don't have an account?
             <Link
               to="/signup"
               className="text-green-600 font-semibold hover:text-green-700"
