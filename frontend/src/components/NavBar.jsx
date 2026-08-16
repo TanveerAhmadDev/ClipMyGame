@@ -6,6 +6,8 @@ import {
   Bell,
   Moon,
   Sun,
+  Plus,
+  Headphones,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -13,14 +15,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../features/theme/themeSlice";
 import SearchBar from "./Search/SearchBar";
 
-const NavBar = () => {
+const NavBar = ({ setIsPosting }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const darkMode = useSelector((state) => state.theme.darkMode);
   const user = useSelector((state) => state.auth.user);
 
-  const navItems = [
+  const MobileNavItems = [
+    { label: "Home", path: "/", icon: <House size={22} /> },
+    {
+      label: "Support",
+      path: "/customer-support",
+      icon: <Headphones size={22} />,
+    },
+    { label: "Add", path: "/add", icon: <Plus size={26} />, isAdd: true },
+    { label: "Messages", path: "/messages", icon: <MessageCircle size={22} /> },
+    { label: "Matches", path: "/matches", icon: <Trophy size={22} /> },
+  ];
+  const DesktopNavItems = [
     { label: "Home", path: "/", icon: <House size={22} /> },
     { label: "Discover", path: "/discover", icon: <Users size={22} /> },
     { label: "Matches", path: "/matches", icon: <Trophy size={22} /> },
@@ -44,8 +57,8 @@ const NavBar = () => {
             </div>
           </div>
           {/* ========================================= NAVIGATION ========================================= */}
-          <div className="flex items-center w-full md:w-auto md:gap-7 md:ml-auto h-full text-gray-600 dark:text-gray-300 ">
-            {navItems.map((item) => (
+          <div className="hidden md:flex items-center w-full md:w-auto md:gap-7 md:ml-auto h-full text-gray-600 dark:text-gray-300 ">
+            {DesktopNavItems.map((item) => (
               <div
                 key={item.path}
                 className=" flex-1 md:flex-none h-full flex items-center justify-center "
@@ -83,10 +96,36 @@ const NavBar = () => {
               </div>
             </button>
           </div>
+
+          <div className="flex md:hidden items-center w-full md:w-auto md:gap-7 md:ml-auto h-full text-gray-600 dark:text-gray-300">
+            {MobileNavItems.map((item) => (
+              <div
+                key={item.path}
+                className={` flex-1 md:flex-none h-full flex items-center justify-center ${item.isAdd ? "relative" : ""} `}
+              >
+                {item.isAdd ? (
+                  <button
+                    type="button"
+                    onClick={() => setIsPosting(true)}
+                    className=" w-12 h-12 rounded-full bg-[#16A34A] text-white flex items-center justify-center shadow-lg shadow-green-500/30 border-4 border-white dark:border-zinc-900 -translate-y-3 hover:scale-105 active:scale-95 transition-all duration-200 "
+                  >
+                    {item.icon}
+                  </button>
+                ) : (
+                  <NavItem
+                    icon={item.icon}
+                    label={item.label}
+                    active={location.pathname === item.path}
+                    onClick={() => navigate(item.path)}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </nav>
 
-      <nav className="w-full max-w-full overflow-hidden md:sticky md:top-0 md:border-b md:hidden z-50 bg-white dark:bg-[#1E1E1E] border-gray-200 dark:border-zinc-700 shadow-sm transition-colors duration-300">
+      <nav className="w-full max-w-full overflow-hidden md:sticky md:top-0 md:border-b hidden z-50 bg-white dark:bg-[#1E1E1E] border-gray-200 dark:border-zinc-700 shadow-sm transition-colors duration-300">
         <div className="w-full max-w-full h-16 px-3 flex items-center justify-between gap-3 overflow-hidden ">
           <img
             src={

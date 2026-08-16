@@ -12,8 +12,7 @@ import SkillFilter from "./SkillFilter";
 import LocationFilter from "./LocationFilter";
 import LevelFilter from "./LevelFilter";
 import ContentTypeFilter from "./ContentTypeFilter";
-import { motion, AnimatePresence } from "framer-motion";
-const PostFilters = ({
+const DesktopPostFilters = ({
   filterOptions = {},
   filters = {},
   onUpdateFilter,
@@ -163,10 +162,10 @@ const PostFilters = ({
         <button
           type="button"
           onClick={openFilters}
-          className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 inline-flex items-center gap-3 px-5 py-3 rounded-2xl hover:bg-gray-200 focus:bg-gray-200 dark:focus:bg-zinc-700  dark:hover:bg-zinc-700 transition dark:text-white"
+          className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 hidden md:inline-flex items-center px-3 py-3 gap-2 rounded-xl hover:bg-gray-200 focus:bg-gray-200 dark:focus:bg-zinc-700  dark:hover:bg-zinc-700 transition dark:text-white"
         >
           <SlidersHorizontal size={21} />
-          <span className="font-medium">Filters</span>
+          <span className="font-medium block">Filters</span>
           {totalSelected > 0 && (
             <span className=" min-w-6 h-6 px-1.5 rounded-full bg-green-600 text-white text-xs flex items-center justify-center ">
               {totalSelected}
@@ -177,7 +176,7 @@ const PostFilters = ({
           <button
             type="button"
             onClick={handleReset}
-            className="md:hidden  px-2 h-8 rounded-xl border  border-gray-300 dark:border-zinc-700 hover:bg-gray-100 dark:hover:bg-zinc-800 transition dark:text-white"
+            className="hidden  md:block px-2 h-8 rounded-xl border  border-gray-300 dark:border-zinc-700 hover:bg-gray-100 dark:hover:bg-zinc-800 transition dark:text-white"
           >
             <RotateCcw size={17} />
           </button>
@@ -339,109 +338,7 @@ const PostFilters = ({
           </div>
         </>
       )}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, height: 0, y: -10 }}
-            animate={{ opacity: 1, height: "auto", y: 0 }}
-            exit={{ opacity: 0, height: 0, y: -10 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="overflow-hidden block md:hidden"
-          >
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              variants={{
-                hidden: {},
-                visible: { transition: { staggerChildren: 0.05 } },
-              }}
-              className="flex gap-2 mt-3 pb-2 overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-zinc-700 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full"
-            >
-              {filteredItems.map((item) => {
-                const selectedCount = getSelectedCount(item.key);
-                const isActive = activeFilter === item.key;
-                return (
-                  <motion.div
-                    key={item.key}
-                    variants={{
-                      hidden: {
-                        opacity: 0,
-                        y: -8,
-                        scale: 0.9,
-                      },
-                      visible: {
-                        opacity: 1,
-                        scale: 1,
-                        y: 0,
-                      },
-                    }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="shrink-0"
-                    onMouseEnter={() => handleFilterEnter(item.key)}
-                  >
-                    <motion.button
-                      type="button"
-                      onClick={() => handleFilterClick(item.key)}
-                      whileHover={{ scale: 1.03 }}
-                      whileTap={{ scale: 0.96 }}
-                      className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-full border text-sm font-medium whitespace-nowrap transition-colors ${isActive ? ` bg-zinc-500 border-zinc-500 text-white dark:bg-white dark:border-white dark:text-gray-900 ` : ` bg-white border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 dark:bg-zinc-900 dark:border-zinc-700 dark:text-gray-300 dark:hover:bg-zinc-800 `} `}
-                    >
-                      <span>{item.label}</span>
-                      <AnimatePresence>
-                        {selectedCount > 0 && (
-                          <motion.span
-                            initial={{ opacity: 0, scale: 0.5 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.5 }}
-                            className=" min-w-5 h-5 px-1 rounded-full bg-green-600 text-white text-[11px] font-semibold flex items-center justify-center "
-                          >
-                            {selectedCount}
-                          </motion.span>
-                        )}
-                      </AnimatePresence>
-                      <motion.span
-                        animate={{ rotate: isActive ? 90 : 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="flex items-center"
-                      >
-                        <ChevronRight size={14} />
-                      </motion.span>
-                    </motion.button>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          </motion.div>
-        )}
-        {activeFilter && (
-          <div
-            onMouseEnter={() => setActiveFilter(activeFilter)}
-            onMouseLeave={() => setActiveFilter(null)}
-            onClick={(event) => event.stopPropagation()}
-            className="block absolute md:hidden pointer-events-auto min-w-70 max-h-[80vh] w-fit  overflow-hidden bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-zinc-700 "
-          >
-            <div className="flex flex-col max-h-[80vh]">
-              <div className=" shrink-0 z-10 flex items-center justify-between px-6 py-2 bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-700 ">
-                <h3 className="text-md font-semibold text-gray-900 dark:text-white ">
-                  {filterItems.find((item) => item.key === activeFilter)?.label}
-                </h3>
-                <button
-                  type="button"
-                  onClick={() => setActiveFilter(null)}
-                  className=" w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-zinc-800 transition dark:text-white"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-              <div className=" flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-2 py-2">
-                {renderActiveFilter()}
-              </div>
-            </div>
-          </div>
-        )}
-      </AnimatePresence>
     </>
   );
 };
-export default PostFilters;
+export default DesktopPostFilters;

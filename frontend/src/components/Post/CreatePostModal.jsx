@@ -117,10 +117,10 @@ const CreatePostModal = ({ open, onClose, user }) => {
     <>
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-9998"
+        className="fixed inset-0 bg-black/15 backdrop-blur-[1px]  z-9998"
       />
 
-      <div className="fixed top-5 md:top-20 left-1/2 -translate-x-1/2 w-100 md:w-full max-w-200 h-[90vh] md:h-162.5 bg-white rounded-xl flex flex-col z-9999 overflow-hidden">
+      <div className="fixed top-5 md:top-20 left-1/2 -translate-x-1/2 w-90 md:w-full max-w-200 h-[90vh] md:h-162.5 bg-white rounded-xl flex flex-col z-9999 overflow-hidden">
         {/* HEADER */}
         <header className="h-20 shrink-0 px-6 flex items-center justify-between border-b border-zinc-200">
           <div className="flex items-center gap-3">

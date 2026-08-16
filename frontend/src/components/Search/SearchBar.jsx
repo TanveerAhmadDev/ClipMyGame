@@ -108,7 +108,7 @@ const SearchBar = ({ className }) => {
         <div className="fixed inset-0 bg-black/15 backdrop-blur-[1px] z-40" />
       )}
 
-      <div ref={wrapperRef} className={`relative z-50 `}>
+      <div ref={wrapperRef} className={`relative z-50 flex-1`}>
         <Search
           size={18}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"

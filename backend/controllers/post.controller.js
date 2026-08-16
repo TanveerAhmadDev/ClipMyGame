@@ -4,6 +4,8 @@ import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 import postLikeModel from "../models/postLike.model.js";
+import axios from "axios";
+import * as cheerio from "cheerio";
 
 // Create Post
 export const createPost = asyncHandler(async (req, res) => {
@@ -285,4 +287,56 @@ export const togglePostLike = asyncHandler(async (req, res) => {
       likes: post.performance.likes,
     }),
   );
+});
+
+export const resolveExternalMedia = asyncHandler(async (req, res) => {
+  const { url } = req.body;
+
+  if (!url) {
+    throw new apiError(400, "Media URL is required.");
+  }
+
+  let parsedUrl;
+
+  try {
+    parsedUrl = new URL(url);
+  } catch {
+    throw new apiError(400, "Invalid URL.");
+  }
+
+  // Unsplash page
+  if (
+    parsedUrl.hostname === "unsplash.com" ||
+    parsedUrl.hostname === "www.unsplash.com"
+  ) {
+    const response = await axios.get(url, {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/151 Safari/537.36",
+      },
+    });
+
+    const $ = cheerio.load(response.data);
+
+    let imageUrl =
+      $('meta[property="og:image"]').attr("content") ||
+      $('meta[name="twitter:image"]').attr("content");
+
+    if (!imageUrl) {
+      throw new apiError(
+        400,
+        "Unable to find an image from this Unsplash URL.",
+      );
+    }
+
+    return res.status(200).json(
+      new apiResponse(200, "Media resolved successfully.", {
+        url: imageUrl,
+        type: "image",
+        source: "unsplash",
+      }),
+    );
+  }
+
+  throw new apiError(400, "Unsupported external source.");
 });
