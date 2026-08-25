@@ -39,7 +39,11 @@ const ProfileCard = () => {
 
           <div className="flex items-center justify-center gap-1 text-sm text-gray-500 mt-2">
             <MapPin size={15} />
-            {user?.location?.country}, {user?.location?.district}
+
+            <div className="flex flex-col">
+              <span>{user?.location?.country}</span>
+              <span>{user?.location?.district}</span>
+            </div>
           </div>
         </div>
 
