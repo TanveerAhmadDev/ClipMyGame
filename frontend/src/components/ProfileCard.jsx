@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const ProfileCard = () => {
-  const user = useSelector((state) => state.auth.user);
+  const { user, roleData } = useSelector((state) => state.auth);
 
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const ProfileCard = () => {
             {user?.fullName}
           </h2>
 
-          <p className="text-green-600 font-medium">Football Player</p>
+          <p className="text-green-600 font-medium">{roleData?.sport}</p>
 
           <div className="flex items-center justify-center gap-1 text-sm text-gray-500 mt-2">
             <MapPin size={15} />
@@ -45,10 +45,17 @@ const ProfileCard = () => {
 
         {/* Verification */}
         <div className="flex justify-center mt-3">
-          <span className="flex items-center gap-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-xs font-medium">
-            <ShieldCheck size={14} />
-            Verified Athlete
-          </span>
+          {user?.isVerified ? (
+            <span className="flex items-center gap-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-xs font-medium">
+              <ShieldCheck size={14} />
+              Verified
+            </span>
+          ) : (
+            <span className="flex items-center gap-1 bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-xs font-medium">
+              <ShieldCheck size={14} />
+              Not Verified
+            </span>
+          )}
         </div>
 
         {/* Stats */}

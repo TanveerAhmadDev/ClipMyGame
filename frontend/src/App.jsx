@@ -13,7 +13,9 @@ import ProfilePage from "./pages/ProfilePage";
 import BannerManagement from "./pages/BannerManagement";
 import AuthInitializer from "./AuthInitializer";
 import PageNotFound from "./pages/PageNotFound";
-// import DisCover from "./pages/DisCover";
+import Opportunities from "./pages/Opportunities";
+import CreateOpportunity from "./pages/CreateOpportunity";
+import OpportunityDetails from "./pages/OpportunityDetails";
 
 const App = () => {
   const darkMode = useSelector((state) => state.theme.darkMode);
@@ -26,6 +28,9 @@ const App = () => {
     <>
       <AuthInitializer>
         <Routes>
+          <Route path="/opportunities" element={<Opportunities />} />
+          <Route path="/opportunities/create" element={<CreateOpportunity />} />
+          <Route path="/opportunities/:id" element={<OpportunityDetails />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/signin" element={<SignInPage />} />

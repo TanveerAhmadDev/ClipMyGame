@@ -10,10 +10,8 @@ import {
   Trophy,
   Award,
 } from "lucide-react";
-
 import InputField from "../../InputFiled";
 import TextAreaField from "../../TextAreaField";
-
 const Athlete = ({ roleData, updateField }) => {
   const sports = [
     "Football",
@@ -30,19 +28,15 @@ const Athlete = ({ roleData, updateField }) => {
     "MMA",
     "Other",
   ];
-
   const dominantFoot = ["Left", "Right", "Both"];
-
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold">Athlete Information</h2>
-
         <p className="mt-1 text-gray-500">
           Tell coaches and scouts more about your sporting career.
         </p>
       </div>
-
       <InputField
         icon={Dumbbell}
         label="Sport"
@@ -51,7 +45,6 @@ const Athlete = ({ roleData, updateField }) => {
         value={roleData.sport || ""}
         onChange={(e) => updateField("sport", e.target.value)}
       />
-
       <InputField
         icon={Goal}
         label="Playing Position"
@@ -59,7 +52,6 @@ const Athlete = ({ roleData, updateField }) => {
         value={roleData.position || ""}
         onChange={(e) => updateField("position", e.target.value)}
       />
-
       <div className="grid md:grid-cols-2 gap-6">
         <InputField
           icon={Ruler}
@@ -69,7 +61,6 @@ const Athlete = ({ roleData, updateField }) => {
           value={roleData.height || ""}
           onChange={(e) => updateField("height", e.target.value)}
         />
-
         <InputField
           icon={Weight}
           label="Weight (kg)"
@@ -79,7 +70,6 @@ const Athlete = ({ roleData, updateField }) => {
           onChange={(e) => updateField("weight", e.target.value)}
         />
       </div>
-
       <div className="grid md:grid-cols-2 gap-6">
         <InputField
           icon={Footprints}
@@ -89,7 +79,6 @@ const Athlete = ({ roleData, updateField }) => {
           value={roleData.dominantFoot || ""}
           onChange={(e) => updateField("dominantFoot", e.target.value)}
         />
-
         <InputField
           icon={Shirt}
           label="Jersey Number"
@@ -99,7 +88,6 @@ const Athlete = ({ roleData, updateField }) => {
           onChange={(e) => updateField("jerseyNumber", e.target.value)}
         />
       </div>
-
       <div className="grid md:grid-cols-2 gap-6">
         <InputField
           icon={Building2}
@@ -108,7 +96,6 @@ const Athlete = ({ roleData, updateField }) => {
           value={roleData.currentClub || ""}
           onChange={(e) => updateField("currentClub", e.target.value)}
         />
-
         <InputField
           icon={Trophy}
           label="Experience (Years)"
@@ -118,14 +105,10 @@ const Athlete = ({ roleData, updateField }) => {
           onChange={(e) => updateField("experience", e.target.value)}
         />
       </div>
-
       <TextAreaField
         icon={Award}
         label="Achievements"
-        placeholder={`Example:
-• National U18 Champion
-• Best Player 2025
-• League Top Scorer`}
+        placeholder={`Example: • National U18 Champion • Best Player 2025 • League Top Scorer`}
         maxLength={1000}
         value={roleData.achievements || ""}
         onChange={(e) => updateField("achievements", e.target.value)}
@@ -133,5 +116,4 @@ const Athlete = ({ roleData, updateField }) => {
     </div>
   );
 };
-
 export default Athlete;

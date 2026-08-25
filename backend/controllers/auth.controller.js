@@ -59,38 +59,6 @@ export const register = asyncHandler(async (req, res) => {
     .json(new apiResponse(201, "OTP sent successfully.", userData));
 });
 
-// export const login = asyncHandler(async (req, res) => {
-//   let { email, password } = req.body;
-
-//   email = email.trim().toLowerCase();
-
-//   const userChecking = await userModel.findOne({ email });
-
-//   if (!userChecking) {
-//     throw new apiError(403, "User not found");
-//   }
-
-//   const passwordChecking = await bcrypt.compare(
-//     password,
-//     userChecking.password,
-//   );
-
-//   if (!passwordChecking) {
-//     throw new apiError(403, "Password incorrect");
-//   }
-
-//   const accessToken = accessTokenGenerator(userChecking._id);
-
-//   res.cookie("accessToken", accessToken, {
-//     httpOnly: true,
-//     maxAge: 15 * 60 * 10000,
-//   });
-
-//   res
-//     .status(200)
-//     .json(new apiResponse(200, "User login successfully.", userChecking));
-// });
-
 export const login = asyncHandler(async (req, res) => {
   let { email, password } = req.body;
 

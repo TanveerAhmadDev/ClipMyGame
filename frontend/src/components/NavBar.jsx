@@ -8,6 +8,7 @@ import {
   Sun,
   Plus,
   Headphones,
+  BriefcaseBusiness,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -25,9 +26,9 @@ const NavBar = ({ setIsPosting }) => {
   const MobileNavItems = [
     { label: "Home", path: "/", icon: <House size={22} /> },
     {
-      label: "Support",
-      path: "/customer-support",
-      icon: <Headphones size={22} />,
+      label: "Opportunities",
+      path: "/opportunities",
+      icon: <BriefcaseBusiness size={22} />,
     },
     { label: "Add", path: "/add", icon: <Plus size={26} />, isAdd: true },
     { label: "Messages", path: "/messages", icon: <MessageCircle size={22} /> },
@@ -35,7 +36,11 @@ const NavBar = ({ setIsPosting }) => {
   ];
   const DesktopNavItems = [
     { label: "Home", path: "/", icon: <House size={22} /> },
-    { label: "Discover", path: "/discover", icon: <Users size={22} /> },
+    {
+      label: "Ospportunities",
+      path: "/opportunities",
+      icon: <BriefcaseBusiness size={22} />,
+    },
     { label: "Matches", path: "/matches", icon: <Trophy size={22} /> },
     { label: "Messages", path: "/messages", icon: <MessageCircle size={22} /> },
     { label: "Alerts", path: "/alerts", icon: <Bell size={22} /> },
@@ -74,7 +79,10 @@ const NavBar = ({ setIsPosting }) => {
             {/* ========================================= PROFILE — DESKTOP ONLY ========================================= */}
             <div className=" hidden md:flex items-center justify-center ">
               <NavItem
-                image={user?.profilePhoto || "https://i.pravatar.cc/150?img=12"}
+                image={
+                  user?.profilePhoto ||
+                  `https://ui-avatars.com/api/?name=${user?.userName}`
+                }
                 label="Profile"
                 onClick={() => navigate("/profile")}
                 className={""}

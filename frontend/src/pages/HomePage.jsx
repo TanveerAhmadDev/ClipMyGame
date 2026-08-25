@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import HomeHeader from "../components/HomeHeader.jsx";
 import SearchBar from "../components/Search/SearchBar.jsx";
 import MobilePostFilters from "../components/filters/MobilePostFilters.jsx";
+import ProfileMenu from "../components/ProfileMenu.jsx";
 const HomePage = () => {
   const dispatch = useDispatch();
 
@@ -35,6 +36,7 @@ const HomePage = () => {
   const { posts, loadingPosts } = usePosts(selectedFilters);
   const banners = useBannerFeed(selectedFilters.sport);
   const bannerInterval = 3;
+  const [profileMenu, setProfileMenu] = useState(false);
 
   const handleLike = async (postId) => {
     try {
@@ -68,7 +70,7 @@ const HomePage = () => {
     fetchProfile();
   }, [dispatch]);
   useEffect(() => {
-    if (isPosting) {
+    if (isPosting || profileMenu) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
@@ -76,13 +78,21 @@ const HomePage = () => {
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [isPosting]);
+  }, [isPosting, profileMenu]);
   return (
     <>
       <NavBar setIsPosting={setIsPosting} />
-      <HomeHeader user={user} />
       <div className="pt-2 pb-1 md:hidden w-full px-3 grid grid-cols-[1fr_auto] gap-2 dark:bg-[#1E1E1E] ">
-        <div className="min-w-0">
+        <div className="min-w-0 flex items-center gap-2">
+          <img
+            src={
+              user?.profilePhoto ||
+              `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.userName || "User")}&background=1f2937&color=fff`
+            }
+            alt={user?.userName || "Profile"}
+            className=" w-10 h-10 rounded-full object-cover cursor-pointer"
+            onClick={() => setProfileMenu((prev) => !prev)}
+          />
           <SearchBar />
         </div>
 
@@ -93,8 +103,10 @@ const HomePage = () => {
           onReset={resetFilters}
         />
       </div>
+      {profileMenu && <ProfileMenu setProfileMenu={setProfileMenu} />}
       <div className=" flex gap-5 min-h-screen py-3 px-2 md:px-40 dark:bg-[#1E1E1E] transition-colors duration-300 ">
         {/* LEFT */}
+
         <div className="hidden md:block sticky top-20">
           <ProfileCard />
         </div>

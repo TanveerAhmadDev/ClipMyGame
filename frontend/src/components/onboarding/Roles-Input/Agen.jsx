@@ -6,22 +6,18 @@ import {
   Globe,
   ClipboardList,
 } from "lucide-react";
-
 import InputField from "../../InputFiled";
 import TextAreaField from "../../TextAreaField";
 import TagInput from "../../TagInput";
-
 const Agent = ({ roleData, updateField }) => {
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold">Agent Information</h2>
-
         <p className="mt-1 text-gray-500">
           Let athletes and clubs know about your agency and expertise.
         </p>
       </div>
-
       <InputField
         icon={Building2}
         label="Agency Name"
@@ -29,7 +25,6 @@ const Agent = ({ roleData, updateField }) => {
         value={roleData.agencyName || ""}
         onChange={(e) => updateField("agencyName", e.target.value)}
       />
-
       <InputField
         icon={BadgeCheck}
         label="License Number"
@@ -37,7 +32,6 @@ const Agent = ({ roleData, updateField }) => {
         value={roleData.licenseNumber || ""}
         onChange={(e) => updateField("licenseNumber", e.target.value)}
       />
-
       <InputField
         icon={Briefcase}
         type="number"
@@ -46,7 +40,6 @@ const Agent = ({ roleData, updateField }) => {
         value={roleData.experience || ""}
         onChange={(e) => updateField("experience", e.target.value)}
       />
-
       <TagInput
         label="Specializations"
         value={roleData.specialization || []}
@@ -55,7 +48,6 @@ const Agent = ({ roleData, updateField }) => {
         }
         placeholder="Football Contracts"
       />
-
       <TagInput
         label="Represented Sports"
         value={roleData.representedSports || []}
@@ -64,7 +56,6 @@ const Agent = ({ roleData, updateField }) => {
         }
         placeholder="Football"
       />
-
       <TagInput
         label="Operating Countries"
         value={roleData.operatingCountries || []}
@@ -73,7 +64,6 @@ const Agent = ({ roleData, updateField }) => {
         }
         placeholder="Pakistan"
       />
-
       <InputField
         icon={Globe}
         label="Website"
@@ -82,7 +72,6 @@ const Agent = ({ roleData, updateField }) => {
         value={roleData.website || ""}
         onChange={(e) => updateField("website", e.target.value)}
       />
-
       <TextAreaField
         icon={ClipboardList}
         label="Professional Summary"
@@ -96,5 +85,4 @@ const Agent = ({ roleData, updateField }) => {
     </div>
   );
 };
-
 export default Agent;

@@ -19,7 +19,12 @@ const AuthInitializer = ({ children }) => {
 
         const { data } = await api.get("/user/me");
 
-        dispatch(setUserData(data.data));
+        dispatch(
+          setUserData({
+            user: data.data.user,
+            roleData: data.data.roleData,
+          }),
+        );
       } catch (error) {
         console.log("Authentication check failed:", error);
 

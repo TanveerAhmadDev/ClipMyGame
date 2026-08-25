@@ -10,6 +10,7 @@ import athleteRouter from "../routes/athlete.routes.js";
 import postRouter from "../routes/post.routes.js";
 import searchRouter from "../routes/search.router.js";
 import bannerRouter from "../routes/banner.router.js";
+import opportunityRouter from "../routes/opportunity.routes.js";
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use("/api/athlete", athleteRouter);
 app.use("/api/post", postRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/banner", bannerRouter);
+app.use("/api/opportunities", opportunityRouter);
 
 app.use(errorHandler);
 

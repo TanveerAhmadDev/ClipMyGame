@@ -3,10 +3,9 @@ import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
 import userModel from "../models/user.model.js";
 import uploadToCloudinary from "../utils/uploadToCloudinary.js";
-
-//library
-import jwt from "jsonwebtoken";
 import fs from "fs";
+import athleteModel from "../models/athlete.model.js";
+import mediaModel from "../models/media.model.js";
 
 export const userData = asyncHandler(async (req, res) => {
   const user = req.user;
@@ -15,9 +14,20 @@ export const userData = asyncHandler(async (req, res) => {
     throw new apiError(402, "Complete Your profile First");
   }
 
-  return res
-    .status(200)
-    .json(new apiResponse(200, "User data fetched successfully", user));
+  let roleData = null;
+
+  if (user.userRole === "Athlete") {
+    roleData = await athleteModel.findOne({ userId: user._id });
+  } else if (user.userRole === "Media") {
+    roleData = await mediaModel.findOne({ userId: user._id });
+  }
+
+  return res.status(200).json(
+    new apiResponse(200, "User data fetched successfully", {
+      user,
+      roleData,
+    }),
+  );
 });
 
 export const completeBasicInformation = asyncHandler(async (req, res) => {
