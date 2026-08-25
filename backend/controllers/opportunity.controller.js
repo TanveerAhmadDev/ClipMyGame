@@ -3,6 +3,7 @@ import opportunityModel from "../models/opportunity.model.js";
 import opportunityApplicationModel from "../models/opportunityApplication.model.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
+import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 
 export const createOpportunity = asyncHandler(async (req, res) => {
   const userId = req.user._id;
@@ -10,9 +11,9 @@ export const createOpportunity = asyncHandler(async (req, res) => {
   const {
     title,
     type,
+    category,
     description,
     organization = "",
-    coverImage = "",
     sport = "",
     location = {},
     mode = "Onsite",
@@ -22,7 +23,33 @@ export const createOpportunity = asyncHandler(async (req, res) => {
     applicationUrl = "",
   } = req.body;
 
-  console.log(type);
+  const featureImage = req.files?.featureImage?.[0];
+  const extraImages = req.files?.MoreImages || [];
+
+  let featureImageUrl = null;
+  let extraImageUrls = [];
+
+  if (featureImage) {
+    const uploaded = await uploadToCloudinary(
+      featureImage.path,
+      "ClipMyGame/Posting",
+    );
+
+    featureImageUrl = uploaded.secure_url;
+  }
+
+  if (extraImages.length > 0) {
+    extraImageUrls = await Promise.all(
+      extraImages.map(async (file) => {
+        const uploaded = await uploadToCloudinary(
+          file.path,
+          "ClipMyGame/Posting",
+        );
+
+        return uploaded.secure_url;
+      }),
+    );
+  }
 
   if (!title?.trim()) {
     throw new apiError(400, "Opportunity title is required.");
@@ -30,6 +57,10 @@ export const createOpportunity = asyncHandler(async (req, res) => {
 
   if (!type) {
     throw new apiError(400, "Opportunity type is required.");
+  }
+
+  if (!category) {
+    throw new apiError(400, "Opportunity category is required.");
   }
 
   if (!description?.trim()) {
@@ -40,9 +71,11 @@ export const createOpportunity = asyncHandler(async (req, res) => {
     creatorId: userId,
     title,
     type,
+    category,
+    featureImage: featureImageUrl,
+    extraImages: extraImageUrls,
     description,
     organization,
-    coverImage,
     sport,
     location,
     mode,

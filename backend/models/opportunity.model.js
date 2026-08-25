@@ -18,6 +18,12 @@ const opportunitySchema = new mongoose.Schema(
 
     type: {
       type: String,
+      enum: ["Request", "Offer"],
+      required: true,
+      index: true,
+    },
+    category: {
+      type: String,
       enum: [
         "Job",
         "Scholarship",
@@ -45,10 +51,11 @@ const opportunitySchema = new mongoose.Schema(
       default: "",
     },
 
-    coverImage: {
+    featureImage: {
       type: String,
       default: "",
     },
+    extraImages: [{ type: String, default: "" }],
 
     sport: {
       type: String,

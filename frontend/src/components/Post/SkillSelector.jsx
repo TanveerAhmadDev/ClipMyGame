@@ -21,10 +21,12 @@ const SkillSelector = ({ metadata, setMetadata }) => {
 
   return (
     <div>
-      <label className="block mb-2 text-sm font-medium">Skills / Actions</label>
+      <label className="block mb-2 text-sm font-medium dark:text-white">
+        Skills / Actions
+      </label>
 
       {!metadata.sport ? (
-        <div className="border rounded-xl p-4 text-sm text-zinc-500">
+        <div className="rounded-xl p-4 text-sm text-zinc-500  bg-white dark:bg-zinc-950  dark:text-white outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/10">
           Select a sport first.
         </div>
       ) : (
@@ -48,7 +50,7 @@ const SkillSelector = ({ metadata, setMetadata }) => {
                   ${
                     selected
                       ? "bg-green-600 border-green-600 text-white"
-                      : "bg-white border-zinc-300 hover:bg-zinc-100"
+                      : "bg-white dark:bg-zinc-500/20 border-zinc-300/20 hover:bg-zinc-200/20 dark:text-white"
                   }
                 `}
               >

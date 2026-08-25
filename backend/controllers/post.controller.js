@@ -28,6 +28,8 @@ export const createPost = asyncHandler(async (req, res) => {
 
   const files = req.files || [];
 
+  console.log(files);
+
   if (!caption.trim() && files.length === 0) {
     throw new apiError(400, "Post must contain a caption, image, or video.");
   }

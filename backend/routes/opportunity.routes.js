@@ -11,6 +11,7 @@ import {
   getMyOpportunities,
 } from "../controllers/opportunity.controller.js";
 import verifyJWT from "../middlewares/verifyJWT.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
 const opportunityRouter = express.Router();
 
@@ -22,7 +23,15 @@ opportunityRouter.get("/applications/my", verifyJWT, getMyApplications);
 
 opportunityRouter.get("/:id", getOpportunity);
 
-opportunityRouter.post("/", verifyJWT, createOpportunity);
+opportunityRouter.post(
+  "/",
+  verifyJWT,
+  upload.fields([
+    { name: "featureImage", maxCount: 1 },
+    { name: "MoreImages", maxCount: 3 },
+  ]),
+  createOpportunity,
+);
 
 opportunityRouter.post("/:id/apply", verifyJWT, applyToOpportunity);
 

@@ -26,6 +26,7 @@ const OpportunityDetails = () => {
   const [loading, setLoading] = useState(true);
   const [applying, setApplying] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const [applyBox, setApplyBox] = useState(false);
 
@@ -102,6 +103,24 @@ const OpportunityDetails = () => {
       document.body.style.overflow = "auto";
     };
   }, [applyBox]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setSelectedImage(null);
+      }
+    };
+
+    if (selectedImage) {
+      document.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedImage]);
   if (loading) {
     return (
       <>
@@ -171,7 +190,7 @@ const OpportunityDetails = () => {
             <ArrowLeft size={18} /> Back
           </button>
           {/* Hero */}
-          <section className="mt-5 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl p-6 md:p-8">
+          {/* <section className="mt-5 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl p-6 md:p-8">
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
               <div className="flex gap-4">
                 <div
@@ -203,9 +222,124 @@ const OpportunityDetails = () => {
                 </button>
               </div>
             </div>
-            {/* Meta */}
-            {/* <div className="flex flex-wrap gap-x-6 gap-y-3 mt-7 pt-5 border-t border-gray-100 dark:border-zinc-800 text-sm text-gray-500 dark:text-gray-400"> {opportunity.location && ( <div className="flex items-center gap-2"> <MapPin size={17} /> {opportunity.location} </div> )} {opportunity.deadline && ( <div className="flex items-center gap-2"> <CalendarDays size={17} /> Deadline: {opportunity.deadline} </div> )} <div className="flex items-center gap-2"> <Clock3 size={17} /> Posted recently </div> </div> */}
+          </section> */}
+          {/* Hero */}
+          <section className="mt-5 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-3xl overflow-hidden">
+            {/* Feature Image */}
+            {opportunity.featureImage && (
+              <div className="w-full h-56 md:h-72 lg:h-80">
+                <img
+                  src={opportunity.featureImage}
+                  alt={opportunity.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+
+            {/* Hero Content */}
+            <div className="p-6 md:p-8">
+              <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+                <div className="flex gap-4">
+                  <div
+                    className={`w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 ${config.className}`}
+                  >
+                    <Icon size={28} />
+                  </div>
+
+                  <div>
+                    <span className="text-sm font-semibold text-green-600">
+                      {config.label}
+                    </span>
+
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mt-1">
+                      {opportunity.title}
+                    </h1>
+
+                    {opportunity.organization && (
+                      <div className="flex items-center gap-2 mt-2 text-gray-500 dark:text-gray-400">
+                        <Building2 size={16} />
+                        {opportunity.organization}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setSaved(!saved)}
+                    className={`w-11 h-11 rounded-xl border flex items-center justify-center transition ${
+                      saved
+                        ? "bg-green-50 border-green-200 text-green-600"
+                        : "border-gray-200 dark:border-zinc-800 text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800"
+                    }`}
+                  >
+                    <SaveIcon
+                      size={19}
+                      fill={saved ? "currentColor" : "none"}
+                    />
+                  </button>
+
+                  <button className="w-11 h-11 rounded-xl border border-gray-200 dark:border-zinc-800 flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800 transition">
+                    <Share2 size={19} />
+                  </button>
+                </div>
+              </div>
+            </div>
           </section>
+          {/* Extra Images Gallery */}
+          {opportunity.extraImages?.length > 0 && (
+            <section className="mt-6 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-5">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                More Images
+              </h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {opportunity.extraImages.map((image, index) => (
+                  <button
+                    key={image || index}
+                    type="button"
+                    onClick={() => setSelectedImage(image)}
+                    className="group relative aspect-video overflow-hidden rounded-xl bg-gray-100 dark:bg-zinc-800 cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    <img
+                      src={image}
+                      alt={`${opportunity.title} image ${index + 1}`}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Image Lightbox */}
+          {selectedImage && (
+            <div
+              className="fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center p-4"
+              onClick={() => setSelectedImage(null)}
+            >
+              {/* Close button */}
+              <button
+                type="button"
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-5 right-5 z-10 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition"
+                aria-label="Close image"
+              >
+                <X size={24} />
+              </button>
+
+              {/* Image */}
+              <img
+                src={selectedImage}
+                alt={opportunity.title}
+                onClick={(e) => e.stopPropagation()}
+                className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl"
+              />
+            </div>
+          )}
           {/* Main */}
           <div className="grid lg:grid-cols-[1fr_300px] gap-6 mt-6">
             {/* Description */}

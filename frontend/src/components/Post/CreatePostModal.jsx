@@ -120,7 +120,7 @@ const CreatePostModal = ({ open, onClose, user }) => {
         className="fixed inset-0 bg-black/15 backdrop-blur-[1px]  z-9998"
       />
 
-      <div className="fixed top-5 md:top-20 left-1/2 -translate-x-1/2 w-90 md:w-full max-w-200 h-[90vh] md:h-162.5 bg-white rounded-xl flex flex-col z-9999 overflow-hidden">
+      <div className="fixed top-5 md:top-10 left-1/2 -translate-x-1/2 w-90 md:w-full max-w-200 h-[90vh] md:h-162.5 bg-white dark:bg-[#1E1E1E]  rounded-xl flex flex-col z-9999 overflow-hidden">
         {/* HEADER */}
         <header className="h-20 shrink-0 px-6 flex items-center justify-between border-b border-zinc-200">
           <div className="flex items-center gap-3">
@@ -131,7 +131,9 @@ const CreatePostModal = ({ open, onClose, user }) => {
             />
 
             <div>
-              <h2 className="font-semibold text-lg">{user?.fullName}</h2>
+              <h2 className="font-semibold text-lg dark:text-white">
+                {user?.fullName}
+              </h2>
 
               <p className="text-sm text-gray-500">@{user?.userName}</p>
             </div>
@@ -139,7 +141,7 @@ const CreatePostModal = ({ open, onClose, user }) => {
 
           <button
             onClick={onClose}
-            className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center"
+            className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center dark:text-white"
           >
             <X />
           </button>
@@ -152,7 +154,7 @@ const CreatePostModal = ({ open, onClose, user }) => {
               value={caption}
               onChange={handleChange}
               placeholder="Share your training, achievements or match highlights..."
-              className="w-full min-h-48 resize-none outline-none text-lg placeholder:text-gray-400"
+              className="w-full min-h-48 resize-none outline-none text-lg placeholder:text-gray-400 dark:text-white"
             />
 
             <MediaPreview media={postMedia} />
@@ -176,14 +178,14 @@ const CreatePostModal = ({ open, onClose, user }) => {
             ) : (
               <button
                 onClick={openEditor}
-                className="w-11 h-11 rounded-full hover:bg-gray-100 flex items-center justify-center"
+                className="w-11 h-11 rounded-full hover:bg-gray-500/20 flex items-center justify-center"
               >
-                <Image size={24} />
+                <Image className="dark:text-white" size={24} />
               </button>
             )}
 
-            <select className="border rounded-md px-3 h-9 outline-none">
-              <option>Public</option>
+            <select className="dark:bg-[#1E1E1E]  border rounded-md px-3 h-9 outline-none dark:text-white">
+              <option className="">Public</option>
               <option>Followers</option>
               <option>Private</option>
             </select>

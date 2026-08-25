@@ -20,6 +20,9 @@ const PostMetaForm = ({ metadata, setMetadata }) => {
           label="Content Type"
           value={metadata.contentType}
           options={CONTENT_TYPES}
+          className={
+            "dark:border-green-500 bg-white dark:bg-zinc-950 text-gray-900 dark:text-white outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/10"
+          }
           onChange={(contentType) =>
             setMetadata((prev) => ({
               ...prev,
@@ -37,6 +40,9 @@ const PostMetaForm = ({ metadata, setMetadata }) => {
           value={metadata.sport}
           options={SPORTS}
           placeholder="Choose sport"
+          className={
+            "dark:border-green-500 bg-white dark:bg-zinc-950 text-gray-900 dark:text-white outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/10"
+          }
           onChange={(value) =>
             setMetadata((prev) => ({
               ...prev,
@@ -59,6 +65,9 @@ const PostMetaForm = ({ metadata, setMetadata }) => {
         label="Level"
         value={metadata.level}
         options={LEVELS}
+        className={
+          "dark:border-green-500 bg-white dark:bg-zinc-950 text-gray-900 dark:text-white outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/10"
+        }
         onChange={(level) =>
           setMetadata((prev) => ({
             ...prev,
@@ -69,7 +78,13 @@ const PostMetaForm = ({ metadata, setMetadata }) => {
 
       {/* Location */}
 
-      <LocationSelector metadata={metadata} setMetadata={setMetadata} />
+      <LocationSelector
+        metadata={metadata}
+        setMetadata={setMetadata}
+        className={
+          "dark:border-green-500 bg-white dark:bg-zinc-950 text-gray-900 dark:text-white outline-none focus:border-green-500 focus:ring-4 focus:ring-green-500/10"
+        }
+      />
     </div>
   );
 };

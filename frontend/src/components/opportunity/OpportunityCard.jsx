@@ -19,10 +19,10 @@ const OpportunityCard = ({ opportunity }) => {
   const isExpired = deadlineDate && deadlineDate < new Date();
 
   return (
-    <article className=" bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 ">
-      {opportunity.coverImage && (
+    <article className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 h-fit">
+      {opportunity.featureImage && (
         <img
-          src={opportunity.coverImage}
+          src={opportunity.featureImage}
           alt={opportunity.title}
           className="w-full h-44 object-cover"
         />

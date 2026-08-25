@@ -1,51 +1,33 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import { CATEGORY_TAGS } from "../../constants/postOptions";
-
 const TagSelector = ({ metadata, setMetadata }) => {
   const [input, setInput] = useState("");
-
   const tags = metadata.tags;
-
   const suggestions = CATEGORY_TAGS[metadata.sport] || [];
-
   const addTag = (tag) => {
     tag = tag.trim();
-
     if (!tag) return;
-
     if (tags.includes(tag)) return;
-
     if (tags.length >= 10) return;
-
-    setMetadata((prev) => ({
-      ...prev,
-      tags: [...prev.tags, tag],
-    }));
-
+    setMetadata((prev) => ({ ...prev, tags: [...prev.tags, tag] }));
     setInput("");
   };
-
   const removeTag = (tag) => {
     setMetadata((prev) => ({
       ...prev,
       tags: prev.tags.filter((t) => t !== tag),
     }));
   };
-
   const handleKeyDown = (e) => {
     if (e.key !== "Enter") return;
-
     e.preventDefault();
-
     addTag(input);
   };
-
   return (
     <div>
-      <label className="text-sm font-medium">Tags</label>
-
-      <div className="mt-2 border rounded-xl p-3">
+      <label className="text-sm font-medium dark:text-white">Tags</label>
+      <div className=" mt-2  rounded-xl p-3 bg-white dark:bg-zinc-950 text-gray-900 dark:text-white outline-none focus-within:border-green-500 dark:focus-within:border-green-500 focus-within:border ">
         <div className="flex flex-wrap gap-2 items-center">
           {tags.map((tag) => (
             <div
@@ -58,7 +40,6 @@ const TagSelector = ({ metadata, setMetadata }) => {
               </button>
             </div>
           ))}
-
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -68,7 +49,6 @@ const TagSelector = ({ metadata, setMetadata }) => {
           />
         </div>
       </div>
-
       {metadata.sport && (
         <div className="flex flex-wrap gap-2 mt-3">
           {suggestions.map((tag) => (
@@ -86,5 +66,4 @@ const TagSelector = ({ metadata, setMetadata }) => {
     </div>
   );
 };
-
 export default TagSelector;
