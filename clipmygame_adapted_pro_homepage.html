@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClipMyGame</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-dim": "#d2d9f4",
+                      "secondary-container": "#97f4a5",
+                      "background": "#faf8ff",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "error-container": "#ffdad6",
+                      "on-secondary-fixed-variant": "#005321",
+                      "secondary-fixed": "#9af7a8",
+                      "inverse-primary": "#adc6ff",
+                      "primary-fixed-dim": "#adc6ff",
+                      "tertiary-fixed": "#ffdbcd",
+                      "on-tertiary-fixed-variant": "#7c2e00",
+                      "tertiary-fixed-dim": "#ffb596",
+                      "primary-fixed": "#d8e2ff",
+                      "tertiary": "#792c00",
+                      "inverse-surface": "#283044",
+                      "tertiary-container": "#9f3d01",
+                      "surface-variant": "#dae2fc",
+                      "primary-container": "#0058be",
+                      "surface-tint": "#085ac0",
+                      "surface-container": "#eaedff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-container": "#ffc9b3",
+                      "on-primary-container": "#c4d5ff",
+                      "on-error": "#ffffff",
+                      "secondary": "#006e2f",
+                      "hard-shadow-default": "#131b2e",
+                      "outline-variant": "#c2c6d5",
+                      "primary": "#004191",
+                      "on-surface": "#131b2e",
+                      "on-primary-fixed-variant": "#004395",
+                      "on-primary": "#ffffff",
+                      "hard-shadow-hover": "#0058be",
+                      "outline": "#727784",
+                      "on-secondary-fixed": "#002109",
+                      "surface-bright": "#faf8ff",
+                      "surface": "#faf8ff",
+                      "on-tertiary-fixed": "#360f00",
+                      "inverse-on-surface": "#eef0ff",
+                      "surface-container-highest": "#dae2fc",
+                      "on-background": "#131b2e",
+                      "surface-container-low": "#f2f3ff",
+                      "surface-container-high": "#e1e7ff",
+                      "on-surface-variant": "#424753",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#097232",
+                      "on-error-container": "#93000a",
+                      "on-primary-fixed": "#001a42",
+                      "secondary-fixed-dim": "#7fda8e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "40px",
+                      "sm": "8px",
+                      "md": "16px",
+                      "margin-mobile": "16px",
+                      "xs": "4px",
+                      "xl": "48px",
+                      "gutter": "20px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Montserrat"
+                      ],
+                      "headline-lg": [
+                              "Montserrat"
+                      ],
+                      "label-bold": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Montserrat"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.04em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-bold": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .hard-shadow {
+            box-shadow: 4px 4px 0px 0px var(--tw-shadow-color, #131b2e);
+            transition: all 0.2s ease-in-out;
+        }
+        .hard-shadow:hover {
+            box-shadow: 6px 6px 0px 0px var(--tw-shadow-hover-color, #0058be);
+            transform: translate(-2px, -2px);
+        }
+        .bg-grid-pattern {
+            background-image: 
+                linear-gradient(to right, rgba(114, 119, 132, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(114, 119, 132, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen bg-grid-pattern pb-[80px] md:pb-0 pt-[64px]">
+<!-- TopAppBar Shell -->
+<header class="bg-surface border-b border-outline-variant flat no shadows fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:text-primary-container transition-colors">arrow_back</span>
+<span class="font-display-lg-mobile text-display-lg-mobile font-extrabold text-primary tracking-tight">ClipMyGame</span>
+</div>
+<div class="hidden md:flex gap-6">
+<a class="text-on-surface-variant hover:bg-surface-container-low transition-colors px-2 py-1 rounded" href="#">Account</a>
+<a class="text-on-surface-variant hover:bg-surface-container-low transition-colors px-2 py-1 rounded" href="#">Role</a>
+<a class="text-primary font-bold hover:bg-surface-container-low transition-colors px-2 py-1 rounded" href="#">Profile</a>
+<a class="text-on-surface-variant hover:bg-surface-container-low transition-colors px-2 py-1 rounded" href="#">Finish</a>
+</div>
+</header>
+<main class="max-w-7xl mx-auto md:px-margin-desktop overflow-hidden">
+<!-- Hero Section -->
+<section class="py-xl px-margin-mobile md:px-0 flex flex-col items-center text-center border-b border-outline/10">
+<div class="w-full max-w-md mb-8">
+<img class="w-full h-auto object-contain" data-alt="A dynamic, high-energy illustration of diverse athletes in motion (running, jumping, throwing) integrated with digital scouting metrics and charts. The style is modern neo-brutalism with stark black outlines, flat solid colors matching the light-mode UI palette of crisp whites, deep navy blues, and sharp accents. Professional and athletic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBx_k20DTGzmdcX1IeUpNMktnohW3icFP2snraug6KvUFzYgROWNG8XH-yO8j2k6P1pT3SrDihAUUjJIgZx7QIiUjToR5AGFKPBs8yijLgVFi_hoJfofqY8dHRGTmIvwY40vQjXg4cpHRm4w0E80Lvfn8dHx7oLy677F96PqWj0ndlbob4d_ccLF1Jnys0oVhW13EkAnAPQy-e8yxj8T9jWGcGe7Sxo1cVxvCNe8arv5YUcgQ7Bug7"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-display-lg md:text-display-lg mb-8 max-w-2xl">
+                Welcome to your athletic community
+            </h1>
+<div class="w-full max-w-sm space-y-4">
+<button class="w-full py-3 px-4 bg-surface-container-lowest border-2 border-outline rounded flex justify-center items-center gap-3 hard-shadow hover:bg-surface-container-low transition-colors">
+<img alt="Google" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8upjPEhxM0cdALsaq1IV-VWpLyw8Bcy0jv7GoPDGLDehHncQ8MA5e9A5vUOssLEkndbMjJkK923f69f4t0lwxBu7MJ3UKBav0dFETKVzeXl3C_xgVL84m1coAml6qSpIGB7bG3eI6DkhkTWiUHOPZWUTuVP_4Dw45lSPOEf17KsRFFxeOSi1MpFFP8v57K550tQ86Z6g1WFqybaP-_rxwG8_Q8Y3NOopesSwbHzvsIgqzZoNb4Eqj"/>
+<span class="font-label-bold text-label-bold text-on-surface uppercase">Continue with Google</span>
+</button>
+<button class="w-full py-3 px-4 bg-primary text-on-primary rounded flex justify-center items-center font-label-bold text-label-bold uppercase hard-shadow shadow-hard-shadow-default hover:shadow-hard-shadow-hover transition-all">
+                    Sign in with email
+                </button>
+<p class="text-[10px] text-on-surface-variant mt-4">
+                    By clicking Continue to join or sign in, you agree to ClipMyGame's User Agreement, Privacy Policy, and Cookie Policy.
+                </p>
+<p class="font-label-sm text-label-sm mt-2">
+                    New to ClipMyGame? <a class="text-primary font-bold hover:underline" href="#">Join Now</a>
+</p>
+</div>
+</section>
+<!-- Explore Collaborative Articles -->
+<section class="py-xl px-margin-mobile md:px-0 border-b border-outline/10 text-center">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg mb-4">
+                Explore collaborative articles
+            </h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl mx-auto mb-8">
+                We're unlocking community knowledge in a new way. Experts add insights directly into each article, started with the help of AI.
+            </p>
+<div class="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
+<span class="px-4 py-2 bg-surface-container border border-outline-variant rounded-full font-label-sm text-label-sm text-on-surface hover:bg-surface-container-high cursor-pointer transition-colors">Recruitment Tips</span>
+<span class="px-4 py-2 bg-surface-container border border-outline-variant rounded-full font-label-sm text-label-sm text-on-surface hover:bg-surface-container-high cursor-pointer transition-colors">NIL Advice</span>
+<span class="px-4 py-2 bg-surface-container border border-outline-variant rounded-full font-label-sm text-label-sm text-on-surface hover:bg-surface-container-high cursor-pointer transition-colors">Training Drills</span>
+<span class="px-4 py-2 bg-surface-container border border-outline-variant rounded-full font-label-sm text-label-sm text-on-surface hover:bg-surface-container-high cursor-pointer transition-colors">Highlight Tape Pro-Tips</span>
+<span class="px-4 py-2 bg-surface-container border border-outline-variant rounded-full font-label-sm text-label-sm text-on-surface hover:bg-surface-container-high cursor-pointer transition-colors">Nutrition</span>
+<span class="px-4 py-2 bg-surface-container border border-outline-variant rounded-full font-label-sm text-label-sm text-on-surface hover:bg-surface-container-high cursor-pointer transition-colors">Mental Conditioning</span>
+<span class="px-4 py-2 bg-surface-container border border-outline-variant rounded-full font-label-sm text-label-sm text-on-surface hover:bg-surface-container-high cursor-pointer transition-colors">Combine Prep</span>
+</div>
+</section>
+<!-- Find the Right Opportunity -->
+<section class="py-xl px-margin-mobile md:px-0 border-b border-outline/10 text-center">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg mb-8">
+                Find the right opportunity for you
+            </h2>
+<div class="flex flex-wrap justify-center gap-3 max-w-3xl mx-auto">
+<span class="px-4 py-2 bg-surface-container-highest border border-outline rounded-full font-label-sm text-label-sm text-on-surface hover:bg-primary-container hover:text-on-primary-container cursor-pointer transition-colors">Division I Quarterback</span>
+<span class="px-4 py-2 bg-surface-container-highest border border-outline rounded-full font-label-sm text-label-sm text-on-surface hover:bg-primary-container hover:text-on-primary-container cursor-pointer transition-colors">Soccer Scout</span>
+<span class="px-4 py-2 bg-surface-container-highest border border-outline rounded-full font-label-sm text-label-sm text-on-surface hover:bg-primary-container hover:text-on-primary-container cursor-pointer transition-colors">NIL Agent</span>
+<span class="px-4 py-2 bg-surface-container-highest border border-outline rounded-full font-label-sm text-label-sm text-on-surface hover:bg-primary-container hover:text-on-primary-container cursor-pointer transition-colors">Strength Coach</span>
+<span class="px-4 py-2 bg-surface-container-highest border border-outline rounded-full font-label-sm text-label-sm text-on-surface hover:bg-primary-container hover:text-on-primary-container cursor-pointer transition-colors">Athletic Trainer</span>
+<span class="px-4 py-2 bg-surface-container-highest border border-outline rounded-full font-label-sm text-label-sm text-on-surface hover:bg-primary-container hover:text-on-primary-container cursor-pointer transition-colors">Videographer</span>
+</div>
+</section>
+<!-- Post an Opportunity CTA -->
+<section class="py-xl px-margin-mobile md:px-0 border-b border-outline/10 flex justify-center">
+<div class="w-full max-w-lg bg-surface-container-lowest border border-outline-variant p-8 rounded text-center hard-shadow shadow-hard-shadow-default">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg mb-6">
+                    Post your roster spot for millions to see
+                </h3>
+<button class="bg-primary text-on-primary py-3 px-8 rounded font-label-bold text-label-bold uppercase hard-shadow shadow-hard-shadow-default hover:shadow-hard-shadow-hover transition-all">
+                    Post an Opportunity
+                </button>
+</div>
+</section>
+<!-- Verified Scouting Section -->
+<section class="py-xl px-margin-mobile md:px-0 border-b border-outline/10 flex justify-center">
+<div class="w-full max-w-lg bg-surface-container-low border border-outline-variant p-8 rounded text-center hard-shadow shadow-hard-shadow-default relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-9xl">sports_football</span>
+</div>
+<div class="flex justify-center mb-6 relative z-10">
+<div class="relative w-24 h-24 rounded-full border-4 border-surface-container-lowest hard-shadow shadow-hard-shadow-default bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a confident young athlete in uniform, smiling slightly, set against a clean, bright background. The lighting is crisp and even, highlighting their athletic build and determination. Light mode neo-brutalism aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1EQnNCeoG-DRIQRFS6iaEMQisPNTxN4xvulvJawas5pyjIDzH9BD9aNvM4olyfA9GRHMZsVDGO75v0jx360YT4axWmojGY3D0NZHPnR3EdMtx1n8-MXaoMf8owyam8_91qkRI9oVh5-JjGNy6PsWuuY-BCLd6GXzq-GqgKSCraE8DHtONSNvZLUfBY8PNvsZKW0dxRgic7PvnH6MyE7VTWI-iRoT6wfwxJHoCn1x5uF5tf_Mqx8OS"/>
+</div>
+<div class="absolute -bottom-2 bg-secondary text-on-secondary px-3 py-1 rounded-full border-2 border-surface-container-lowest font-label-sm text-label-sm flex items-center gap-1 hard-shadow z-20">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+                        Verified
+                    </div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg mb-4 relative z-10">
+                    Let the right scouts know you're Recruit Ready
+                </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-8 relative z-10">
+                    With the Recruit Ready feature, you can privately signal to scouts or publicly share with the ClipMyGame community that you are open for new opportunities.
+                </p>
+<div class="flex justify-center gap-4 relative z-10">
+<button class="w-10 h-10 bg-primary text-on-primary rounded flex items-center justify-center hard-shadow shadow-hard-shadow-default hover:shadow-hard-shadow-hover hover:bg-primary-container hover:text-primary transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 bg-primary text-on-primary rounded flex items-center justify-center hard-shadow shadow-hard-shadow-default hover:shadow-hard-shadow-hover hover:bg-primary-container hover:text-primary transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Pre-Footer CTA -->
+<section class="py-xl px-margin-mobile md:px-0 text-center flex flex-col items-center">
+<div class="w-32 h-32 mb-6">
+<img class="w-full h-full object-contain" data-alt="A stylized minimalist illustration of a trophy or laurel wreath merging with a digital play button icon. Drawn with bold black lines and filled with stark white and vibrant brand blue accents, matching the kinetic neo-brutalism light mode theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANA-96f_dCuuBdhuQCH0kCqhB5zaA6TVXpYOIqW7BmSVhAmIDJzxJw77w9p5zZlWWR1D9unM3tlExYhUrWt7FCv38MDASWw8Ba7alNcaaA3jPsAEcrSrH_Ob8PBAT9OgA-aiAmsb-Xp2H-78dQBwPNS2WY1min3xH2DfXJMdCdtn4c0jorcqQpJkn79gB3BvCdF85371izpg3FLkYFf8CbIxSLdZdEoBnbKwAKyorjjx_-JOCEmmVz"/>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg mb-8 max-w-md">
+                Join your teammates and scouts on ClipMyGame.
+            </h2>
+<button class="bg-primary text-on-primary py-4 px-10 rounded font-label-bold text-label-bold uppercase hard-shadow shadow-hard-shadow-default hover:shadow-hard-shadow-hover transition-all text-lg">
+                Get Started
+            </button>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container border-t border-outline-variant py-12 px-margin-mobile md:px-margin-desktop text-center pb-24 md:pb-12">
+<div class="font-display-lg-mobile text-display-lg-mobile font-extrabold text-primary tracking-tight mb-6">
+            ClipMyGame
+        </div>
+<div class="flex flex-wrap justify-center gap-4 md:gap-8 font-label-sm text-label-sm text-on-surface-variant mb-8">
+<a class="hover:text-primary transition-colors" href="#">General</a>
+<a class="hover:text-primary transition-colors" href="#">Business Solutions</a>
+<a class="hover:text-primary transition-colors" href="#">Browse Roster</a>
+<a class="hover:text-primary transition-colors" href="#">Directories</a>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant/70">
+            Copyright © 2024 ClipMyGame Inc. All rights reserved.
+        </p>
+</footer>
+<!-- BottomNavBar Shell (Mobile Only) -->
+<nav class="md:hidden bg-surface border-t border-outline-variant shadow-sm fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 px-2 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 transition-transform w-16" href="#">
+<span class="material-symbols-outlined mb-1">person_add</span>
+<span class="font-label-sm text-label-sm">Account</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 transition-transform w-16" href="#">
+<span class="material-symbols-outlined mb-1">groups</span>
+<span class="font-label-sm text-label-sm">Role</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform w-20" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">drive_file_stream</span>
+<span class="font-label-sm text-label-sm font-bold">Profile</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary active:scale-90 transition-transform w-16" href="#">
+<span class="material-symbols-outlined mb-1">check_circle</span>
+<span class="font-label-sm text-label-sm">Finish</span>
+</a>
+</nav>
+</body></html>

@@ -44,7 +44,7 @@ const SignInPage = () => {
 
       localStorage.setItem("accessToken", accessToken);
 
-      navigate("/");
+      navigate("/feed");
     } catch (error) {
       console.log(error);
 

@@ -24,7 +24,7 @@ const NavBar = ({ setIsPosting }) => {
   const user = useSelector((state) => state.auth.user);
 
   const MobileNavItems = [
-    { label: "Home", path: "/", icon: <House size={22} /> },
+    { label: "Home", path: "/feed", icon: <House size={22} /> },
     {
       label: "Opportunities",
       path: "/opportunities",
@@ -35,7 +35,7 @@ const NavBar = ({ setIsPosting }) => {
     { label: "Matches", path: "/matches", icon: <Trophy size={22} /> },
   ];
   const DesktopNavItems = [
-    { label: "Home", path: "/", icon: <House size={22} /> },
+    { label: "Home", path: "/feed", icon: <House size={22} /> },
     {
       label: "Ospportunities",
       path: "/opportunities",
@@ -55,7 +55,7 @@ const NavBar = ({ setIsPosting }) => {
               src="/eeimg.png"
               alt="ClipMyGame"
               className="w-12 cursor-pointer"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/feed")}
             />
             <div className="relative">
               <SearchBar />

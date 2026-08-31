@@ -68,7 +68,7 @@ const PageNotFound = () => {
             className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-9"
           >
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/feed")}
               className=" w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium shadow-lg shadow-red-600/20 transition-all duration-200 hover:-translate-y-0.5 "
             >
               <Home size={18} /> Back to Home

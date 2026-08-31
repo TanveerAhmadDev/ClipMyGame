@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 const OpportunityCard = ({ opportunity }) => {
   const navigate = useNavigate();
 
+  console.log(opportunity);
+
   const deadlineDate = opportunity.deadline
     ? new Date(opportunity.deadline)
     : null;
@@ -30,6 +32,9 @@ const OpportunityCard = ({ opportunity }) => {
       <div className="p-5">
         <div className="flex items-start justify-between gap-4">
           <div>
+            <span className=" inline-flex px-3 py-1 rounded-full bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400 text-xs font-semibold ">
+              @{opportunity.creatorId.userName}
+            </span>
             <span className=" inline-flex px-3 py-1 rounded-full bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400 text-xs font-semibold ">
               {opportunity.type}
             </span>
