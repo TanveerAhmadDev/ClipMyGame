@@ -9,6 +9,7 @@ import {
   updateApplicationStatus,
   getMyApplications,
   getMyOpportunities,
+  getOpportunitiesFilters,
 } from "../controllers/opportunity.controller.js";
 import verifyJWT from "../middlewares/verifyJWT.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -16,6 +17,7 @@ import { upload } from "../middlewares/multer.middleware.js";
 const opportunityRouter = express.Router();
 
 opportunityRouter.get("/", getOpportunities);
+opportunityRouter.get("/filters", getOpportunitiesFilters);
 
 opportunityRouter.get("/my", verifyJWT, getMyOpportunities);
 

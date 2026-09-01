@@ -17,6 +17,7 @@ import Opportunities from "./pages/Opportunities";
 import CreateOpportunity from "./pages/CreateOpportunity";
 import OpportunityDetails from "./pages/OpportunityDetails";
 import LaunchPage from "./pages/LaunchPage";
+import PublicRoute from "./PublicRoute";
 
 const App = () => {
   const darkMode = useSelector((state) => state.theme.darkMode);
@@ -33,7 +34,14 @@ const App = () => {
           <Route path="/opportunities/create" element={<CreateOpportunity />} />
           <Route path="/opportunities/:id" element={<OpportunityDetails />} />
           <Route path="/feed" element={<HomePage />} />
-          <Route path="/" element={<LaunchPage />} />
+          <Route
+            path="/"
+            element={
+              <PublicRoute>
+                <LaunchPage />
+              </PublicRoute>
+            }
+          />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/signin" element={<SignInPage />} />
           <Route

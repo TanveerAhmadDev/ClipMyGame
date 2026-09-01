@@ -5,19 +5,21 @@ const initialFilters = {
   sport: "",
   skill: "",
   level: "",
-  contentType: "",
+  type: "",
+  category: "",
   countryCode: "",
   stateCode: "",
   city: "",
   sortBy: "latest",
 };
 
-const usePostFilters = () => {
+const useOpportuntiesFilters = () => {
   const [filterOptions, setFilterOptions] = useState({
     sports: [],
     skills: [],
     levels: [],
-    contentTypes: [],
+    type: [],
+    category: [],
   });
 
   const [selectedFilters, setSelectedFilters] = useState(initialFilters);
@@ -29,13 +31,16 @@ const usePostFilters = () => {
       try {
         setLoadingFilters(true);
 
-        const { data } = await api.get("/post/filters");
+        const { data } = await api.get("/opportunities/filters");
+
+        console.log(data);
 
         setFilterOptions({
           sports: data.data?.sports || [],
           skills: data.data?.skills || [],
           levels: data.data?.levels || [],
-          contentTypes: data.data?.contentTypes || [],
+          type: data.data?.type || [],
+          category: data.data?.category || [],
         });
       } catch (error) {
         console.error("Failed to fetch filters:", error);
@@ -67,4 +72,4 @@ const usePostFilters = () => {
   };
 };
 
-export default usePostFilters;
+export default useOpportuntiesFilters;

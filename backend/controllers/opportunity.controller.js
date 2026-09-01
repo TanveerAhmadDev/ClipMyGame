@@ -15,13 +15,19 @@ export const createOpportunity = asyncHandler(async (req, res) => {
     description,
     organization = "",
     sport = "",
-    location = {},
     mode = "Onsite",
     deadline = null,
     requirements = [],
     benefits = [],
     applicationUrl = "",
   } = req.body;
+
+  const location =
+    typeof req.body.location === "string"
+      ? JSON.parse(req.body.location)
+      : req.body.location || {};
+
+  console.log("LOCATION:", location);
 
   const featureImage = req.files?.featureImage?.[0];
   const extraImages = req.files?.MoreImages || [];
@@ -101,12 +107,25 @@ export const createOpportunity = asyncHandler(async (req, res) => {
 });
 
 export const getOpportunities = asyncHandler(async (req, res) => {
-  const { type, sport, countryCode, stateCode, city, mode, search } = req.query;
+  const {
+    sport,
+    type,
+    category,
+    countryCode,
+    stateCode,
+    city,
+    mode,
+    search,
+    sortBy = "latest",
+  } = req.query;
 
   const filter = {
     isActive: true,
   };
 
+  if (category) {
+    filter.category = category;
+  }
   if (type) {
     filter.type = type;
   }
@@ -153,6 +172,13 @@ export const getOpportunities = asyncHandler(async (req, res) => {
       },
     ];
   }
+  if (filter.category === "All categorys") {
+    delete filter.category;
+  }
+  if (filter.type === "All types") {
+    s;
+    delete filter.type;
+  }
 
   const opportunities = await opportunityModel
     .find(filter)
@@ -166,6 +192,38 @@ export const getOpportunities = asyncHandler(async (req, res) => {
       opportunities,
     }),
   );
+});
+
+export const getOpportunitiesFilters = asyncHandler(async (req, res) => {
+  const sportEnum = opportunityModel.schema.path("sport").enumValues;
+
+  const levelEnum = opportunityModel.schema.path("level").enumValues;
+
+  const typeEnum = opportunityModel.schema.path("type").enumValues;
+  const categoryEnum = opportunityModel.schema.path("category").enumValues;
+
+  const countries = await opportunityModel.distinct("location.country");
+
+  const states = await opportunityModel.distinct("location.state");
+
+  const cities = await opportunityModel.distinct("location.city");
+
+  const result = {
+    sports: sportEnum,
+    levels: levelEnum,
+    type: typeEnum,
+    category: categoryEnum,
+
+    locations: {
+      countries: countries.filter(Boolean).sort(),
+      states: states.filter(Boolean).sort(),
+      cities: cities.filter(Boolean).sort(),
+    },
+  };
+
+  return res
+    .status(200)
+    .json(new apiResponse(200, "Post filters fetched successfully.", result));
 });
 
 export const getOpportunity = asyncHandler(async (req, res) => {

@@ -37,7 +37,7 @@ const NavBar = ({ setIsPosting }) => {
   const DesktopNavItems = [
     { label: "Home", path: "/feed", icon: <House size={22} /> },
     {
-      label: "Ospportunities",
+      label: "Opportunities",
       path: "/opportunities",
       icon: <BriefcaseBusiness size={22} />,
     },

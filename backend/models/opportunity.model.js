@@ -59,8 +59,18 @@ const opportunitySchema = new mongoose.Schema(
 
     sport: {
       type: String,
-      default: "",
-      index: true,
+      enum: [
+        "football",
+        "cricket",
+        "basketball",
+        "volleyball",
+        "tennis",
+        "athletics",
+        "swimming",
+        "fitness",
+        "esports",
+      ],
+      required: true,
     },
 
     location: {
@@ -99,6 +109,20 @@ const opportunitySchema = new mongoose.Schema(
     deadline: {
       type: Date,
       default: null,
+    },
+
+    level: {
+      type: String,
+      enum: [
+        "u14",
+        "u16",
+        "u20",
+        "amateur",
+        "semi_pro",
+        "professional",
+        "elite",
+        "social",
+      ],
     },
 
     requirements: {

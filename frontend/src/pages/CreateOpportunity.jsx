@@ -194,9 +194,11 @@ const CreateOpportunity = () => {
         dataToSend.append("featureImage", featureImage);
       }
 
-      extraImages.forEach((file) => {
-        dataToSend.append("MoreImages", file);
-      });
+      if (extraImages) {
+        extraImages.forEach((file) => {
+          dataToSend.append("MoreImages", file);
+        });
+      }
 
       const { data } = await api.post("/opportunities", dataToSend, {
         headers: {

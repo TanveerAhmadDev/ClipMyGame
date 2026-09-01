@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 const OpportunityCard = ({ opportunity }) => {
   const navigate = useNavigate();
 
-  console.log(opportunity);
-
   const deadlineDate = opportunity.deadline
     ? new Date(opportunity.deadline)
     : null;
