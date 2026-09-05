@@ -111,10 +111,6 @@ const BasicInformation = ({
     });
   }, [user]);
 
-  useEffect(() => {
-    console.log(profileData);
-  }, [profileData]);
-
   return (
     <div className="p-10">
       <div className="flex justify-center">

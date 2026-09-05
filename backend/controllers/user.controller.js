@@ -11,7 +11,7 @@ export const userData = asyncHandler(async (req, res) => {
   const user = req.user;
 
   if (user.isProfileCompleted == false) {
-    throw new apiError(402, "Complete Your profile First");
+    throw new apiError(402, "Complete Your profile First", user);
   }
 
   let roleData = null;

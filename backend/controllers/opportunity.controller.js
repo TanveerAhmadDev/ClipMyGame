@@ -20,14 +20,14 @@ export const createOpportunity = asyncHandler(async (req, res) => {
     requirements = [],
     benefits = [],
     applicationUrl = "",
+    whatsAppNumber,
+    email,
   } = req.body;
 
   const location =
     typeof req.body.location === "string"
       ? JSON.parse(req.body.location)
       : req.body.location || {};
-
-  console.log("LOCATION:", location);
 
   const featureImage = req.files?.featureImage?.[0];
   const extraImages = req.files?.MoreImages || [];
@@ -89,6 +89,8 @@ export const createOpportunity = asyncHandler(async (req, res) => {
     requirements,
     benefits,
     applicationUrl,
+    whatsAppNumber,
+    email,
   });
 
   const populatedOpportunity = await opportunityModel

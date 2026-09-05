@@ -3,10 +3,12 @@ import BasicInformation from "../components/onboarding/BasicInformation";
 import ContactInformation from "../components/onboarding/ContactInformation";
 import SportsInformation from "../components/onboarding/SportsInformation";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserData } from "../features/auth/authSlice";
+import { setAuthLoading, setUserData } from "../features/auth/authSlice";
 import api from "../utils/axios";
+import { useNavigate } from "react-router-dom";
 
 const ProfileCompletingPage = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [profileData, setProfileData] = useState({
     fullName: "",
@@ -59,6 +61,53 @@ const ProfileCompletingPage = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem("accessToken");
+
+      if (!token) {
+        dispatch(setAuthLoading(false));
+        return;
+      }
+
+      try {
+        const { data } = await api.get("/user/me");
+
+        dispatch(
+          setUserData({
+            user: data.data.user,
+            roleData: data.data.roleData,
+          }),
+        );
+      } catch (error) {
+        console.log("Authentication check failed:", error);
+
+        if (error.response?.status === 402) {
+          const user = error.response?.data?.data;
+
+          dispatch(
+            setUserData({
+              user,
+              roleData: null,
+            }),
+          );
+        }
+      } finally {
+        dispatch(setAuthLoading(false));
+      }
+    };
+
+    checkAuth();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (step == 4) {
+      setTimeout(() => {
+        navigate("/feed");
+      }, 1000);
+    }
+  }, [step]);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-zinc-950 py-10 px-5">
@@ -115,7 +164,7 @@ const ProfileCompletingPage = () => {
             formData={formData}
           />
         )}
-        {step === 4 && <div>a</div>}
+        {step === 4 && <div className="p-10">Profile Completed</div>}
       </div>
     </div>
   );

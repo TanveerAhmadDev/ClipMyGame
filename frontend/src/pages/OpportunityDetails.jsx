@@ -392,7 +392,24 @@ const OpportunityDetails = () => {
                   </div>
                 </div>
               )}
+              <div className="mt-7 pt-6 border-t border-gray-100 dark:border-zinc-800">
+                <h3 className="font-semibold text-gray-900 dark:text-white">
+                  Contact Information
+                </h3>
+                <div className="grid sm:grid-cols-2 gap-4 mt-4">
+                  {opportunity.whatsAppNumber && (
+                    <Detail
+                      label="WhatsApp Number"
+                      value={opportunity.whatsAppNumber}
+                    />
+                  )}
+                  {opportunity.email && (
+                    <Detail label="Email" value={opportunity.email} />
+                  )}
+                </div>
+              </div>
             </section>
+
             {/* Apply */}
             <aside>
               <div className="sticky top-20 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-5">

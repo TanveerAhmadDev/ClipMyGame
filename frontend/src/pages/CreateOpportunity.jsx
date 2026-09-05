@@ -12,6 +12,8 @@ import {
   Plus,
   X,
   UserSearch,
+  Phone,
+  Mail,
 } from "lucide-react";
 import NavBar from "../components/NavBar";
 import { toast } from "react-toastify";
@@ -85,6 +87,8 @@ const CreateOpportunity = () => {
     level: "",
     compensation: "",
     tags: [],
+    email: "",
+    whatsAppNumber: "",
   });
   const [tagInput, setTagInput] = useState("");
   const handleChange = (e) => {
@@ -184,6 +188,8 @@ const CreateOpportunity = () => {
       dataToSend.append("sport", formData.sport);
       dataToSend.append("level", formData.level);
       dataToSend.append("compensation", formData.compensation);
+      dataToSend.append("whatsAppNumber", formData.whatsAppNumber);
+      dataToSend.append("email", formData.email);
 
       // Objects/arrays need to be serialized
       dataToSend.append("location", JSON.stringify(formData.location));
@@ -476,6 +482,32 @@ const CreateOpportunity = () => {
                   ))}
                 </div>
               )}
+            </section>
+            <section className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-5">
+              <h2 className="font-semibold text-gray-900 dark:text-white">
+                Contact information
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                These inputs are temporary.
+              </p>
+              <div className="grid md:grid-cols-2 gap-4 mt-4">
+                <Input
+                  label="Email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="e.g. useranme@gmail.com "
+                  icon={<Mail size={17} />}
+                />
+                <Input
+                  label="WhatsApp Number"
+                  name="whatsAppNumber"
+                  value={formData.whatsAppNumber}
+                  onChange={handleChange}
+                  placeholder="+xxxxxxxxxxxxx"
+                  icon={<Phone size={17} />}
+                />
+              </div>
             </section>
             {/* Actions */}
             <div className="flex justify-end gap-3 pb-8">

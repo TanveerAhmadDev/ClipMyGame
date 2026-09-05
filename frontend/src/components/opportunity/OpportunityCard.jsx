@@ -49,7 +49,7 @@ const OpportunityCard = ({ opportunity }) => {
             onClick={() => navigate(`/opportunities/${opportunity._id}`)}
             className=" w-9 h-9 rounded-full border border-zinc-200 dark:border-zinc-700 flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-zinc-800 transition "
           >
-            <ArrowUpRight size={18} />
+            <ArrowUpRight size={18} className="dark:text-zinc-300" />
           </button>
         </div>
         <p className=" mt-4 text-sm leading-6 text-zinc-600 dark:text-zinc-400 line-clamp-3 ">

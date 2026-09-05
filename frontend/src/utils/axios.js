@@ -21,14 +21,40 @@ api.interceptors.request.use(
 );
 
 // Handle expired/invalid token
+// api.interceptors.response.use(
+//   (response) => {
+//     return response;
+//   },
+//   (error) => {
+//     if (error.response?.status === 401) {
+//       localStorage.removeItem("accessToken");
+//       window.location.replace("/signin");
+//     }
+//     if (error.response?.status === 402) {
+//       window.location.replace("/complete-profile");
+//     }
+
+//     return Promise.reject(error);
+//   },
+// );
+
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const status = error.response?.status;
+
+    if (status === 401) {
       localStorage.removeItem("accessToken");
-      window.location.replace("/signin");
+
+      if (window.location.pathname !== "/signin") {
+        window.location.replace("/signin");
+      }
+    }
+
+    if (status === 402) {
+      if (window.location.pathname !== "/complete-profile") {
+        window.location.replace("/complete-profile");
+      }
     }
 
     return Promise.reject(error);

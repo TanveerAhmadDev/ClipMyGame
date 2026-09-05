@@ -55,9 +55,9 @@ const App = () => {
           <Route
             path="/complete-profile"
             element={
-              <ProtectedRoute>
-                <ProfileCompletingPage />
-              </ProtectedRoute>
+              // <ProtectedRoute>
+              <ProfileCompletingPage />
+              // </ProtectedRoute>
             }
           />
           <Route

@@ -42,6 +42,9 @@ export const createAthleteProfile = asyncHandler(async (req, res) => {
     videos,
   });
 
+  user.isProfileCompleted = true;
+  await user.save();
+
   return res
     .status(201)
     .json(

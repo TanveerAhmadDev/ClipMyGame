@@ -72,6 +72,14 @@ const opportunitySchema = new mongoose.Schema(
       ],
       required: true,
     },
+    whatsAppNumber: {
+      type: String,
+      default: "",
+    },
+    email: {
+      type: String,
+      default: "",
+    },
 
     location: {
       countryCode: {
