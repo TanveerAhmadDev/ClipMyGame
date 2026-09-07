@@ -9,6 +9,7 @@ import {
   Shirt,
   Trophy,
   Award,
+  X,
 } from "lucide-react";
 import InputField from "../../InputFiled";
 import TextAreaField from "../../TextAreaField";
@@ -105,14 +106,52 @@ const Athlete = ({ roleData, updateField }) => {
           onChange={(e) => updateField("experience", e.target.value)}
         />
       </div>
-      <TextAreaField
-        icon={Award}
-        label="Achievements"
-        placeholder={`Example: • National U18 Champion • Best Player 2025 • League Top Scorer`}
-        maxLength={1000}
-        value={roleData.achievements || ""}
-        onChange={(e) => updateField("achievements", e.target.value)}
-      />
+      {(roleData.achievements || [""]).map((achievement, index) => (
+        <div key={index} className="flex items-end gap-2">
+          <div className="flex-1">
+            <InputField
+              icon={Award}
+              label={`Achievement ${index + 1}`}
+              type="text"
+              placeholder="e.g. National U18 Champion"
+              value={achievement}
+              onChange={(e) => {
+                const updatedAchievements = [...roleData.achievements];
+
+                updatedAchievements[index] = e.target.value;
+
+                updateField("achievements", updatedAchievements);
+              }}
+            />
+          </div>
+
+          {roleData.achievements?.length > 1 && (
+            <button
+              type="button"
+              onClick={() => {
+                const updatedAchievements = roleData.achievements.filter(
+                  (_, i) => i !== index,
+                );
+
+                updateField("achievements", updatedAchievements);
+              }}
+              className="mb-1 w-10 h-10 rounded-xl text-red-500 hover:bg-red-50"
+            >
+              <X size={18} />
+            </button>
+          )}
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={() =>
+          updateField("achievements", [...(roleData.achievements || []), ""])
+        }
+        className="mt-2 text-sm font-semibold text-green-600 hover:text-green-700"
+      >
+        + Add More Achievement
+      </button>
     </div>
   );
 };

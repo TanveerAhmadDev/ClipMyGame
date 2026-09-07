@@ -15,7 +15,9 @@ const SportsInformation = ({
   setProfileData,
   formData,
 }) => {
-  const [roleData, setRoleData] = useState({});
+  const [roleData, setRoleData] = useState({
+    achievements: [""],
+  });
   const RoleComponent = {
     Athlete,
     Coach,
