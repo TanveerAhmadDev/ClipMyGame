@@ -6,6 +6,9 @@ import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 import postLikeModel from "../models/postLike.model.js";
 import axios from "axios";
 import * as cheerio from "cheerio";
+import userModel from "../models/user.model.js";
+import athleteModel from "../models/athlete.model.js";
+import mediaModel from "../models/media.model.js";
 
 // Create Post
 export const createPost = asyncHandler(async (req, res) => {
@@ -112,6 +115,110 @@ export const posts = asyncHandler(async (req, res) => {
   );
 });
 
+// export const getPosts = asyncHandler(async (req, res) => {
+//   const {
+//     sport,
+//     contentType,
+//     skill,
+//     level,
+//     countryCode,
+//     stateCode,
+//     city,
+//     sortBy = "latest",
+//   } = req.query;
+
+//   const filter = {};
+
+//   if (sport) {
+//     filter.sport = sport;
+//   }
+
+//   if (contentType) {
+//     filter.contentType = contentType;
+//   }
+
+//   if (skill) {
+//     filter.skills = skill;
+//   }
+
+//   if (level) {
+//     filter.level = level;
+//   }
+
+//   if (countryCode) {
+//     filter["location.countryCode"] = countryCode;
+//   }
+
+//   if (stateCode) {
+//     filter["location.stateCode"] = stateCode;
+//   }
+
+//   if (city) {
+//     filter["location.city"] = city;
+//   }
+
+//   let sort = { createdAt: -1 };
+
+//   if (sortBy === "trending") {
+//     sort = {
+//       "performance.likes": -1,
+//       "performance.comments": -1,
+//       createdAt: -1,
+//     };
+//   }
+
+//   const posts = await postModel
+//     .find(filter)
+//     .populate("userId", "fullName userName profilePhoto userRole")
+//     .sort(sort);
+
+//   const postsWithRoleData = await Promise.all(
+//     posts.map(async (post) => {
+//       const user = post.userId;
+
+//       let roleData = null;
+
+//       if (user?.userRole === "Athlete") {
+//         roleData = await athleteModel.findOne({
+//           userId: user._id,
+//         });
+//       } else if (user?.userRole === "Media") {
+//         roleData = await mediaModel.findOne({
+//           userId: user._id,
+//         });
+//       }
+
+//       return {
+//         ...post.toObject(),
+//         roleData,
+//       };
+//     }),
+//   );
+
+//   const postIds = posts.map((post) => post._id);
+
+//   const userLikes = await postLikeModel
+//     .find({
+//       userId: req.user._id,
+//       postId: { $in: postIds },
+//     })
+//     .select("postId");
+
+//   const likedPostIds = new Set(userLikes.map((like) => like.postId.toString()));
+
+//   const formattedPosts = posts.map((post) => ({
+//     ...post.toObject(),
+
+//     liked: likedPostIds.has(post._id.toString()),
+//   }));
+
+//   return res.status(200).json(
+//     new apiResponse(200, "Posts fetched successfully.", {
+//       posts: formattedPosts,
+//     }),
+//   );
+// });
+
 export const getPosts = asyncHandler(async (req, res) => {
   const {
     sport,
@@ -164,11 +271,37 @@ export const getPosts = asyncHandler(async (req, res) => {
     };
   }
 
+  // Get posts + basic user information
   const posts = await postModel
     .find(filter)
-    .populate("userId", "fullName userName profilePhoto")
+    .populate("userId", "fullName userName profilePhoto userRole")
     .sort(sort);
 
+  // Get role-specific information
+  const postsWithRoleData = await Promise.all(
+    posts.map(async (post) => {
+      const user = post.userId;
+
+      let roleData = null;
+
+      if (user?.userRole === "Athlete") {
+        roleData = await athleteModel.findOne({
+          userId: user._id,
+        });
+      } else if (user?.userRole === "Media") {
+        roleData = await mediaModel.findOne({
+          userId: user._id,
+        });
+      }
+
+      return {
+        ...post.toObject(),
+        roleData,
+      };
+    }),
+  );
+
+  // Get posts liked by current user
   const postIds = posts.map((post) => post._id);
 
   const userLikes = await postLikeModel
@@ -180,8 +313,9 @@ export const getPosts = asyncHandler(async (req, res) => {
 
   const likedPostIds = new Set(userLikes.map((like) => like.postId.toString()));
 
-  const formattedPosts = posts.map((post) => ({
-    ...post.toObject(),
+  // Add liked status
+  const formattedPosts = postsWithRoleData.map((post) => ({
+    ...post,
 
     liked: likedPostIds.has(post._id.toString()),
   }));
@@ -192,6 +326,7 @@ export const getPosts = asyncHandler(async (req, res) => {
     }),
   );
 });
+
 export const getPostFilters = asyncHandler(async (req, res) => {
   const sportEnum = postModel.schema.path("sport").enumValues;
 
@@ -232,12 +367,39 @@ export const getPost = asyncHandler(async (req, res) => {
 
   const posts = await postModel
     .find({ userId })
-    .populate("userId", "fullName userName profilePhoto")
-    .sort({ createdAt: -1 });
+    .populate("userId", "fullName userName profilePhoto userRole");
+
+  // Get role-specific information
+  const postsWithRoleData = await Promise.all(
+    posts.map(async (post) => {
+      const user = post.userId;
+
+      let roleData = null;
+
+      if (user?.userRole === "Athlete") {
+        roleData = await athleteModel.findOne({
+          userId: user._id,
+        });
+      } else if (user?.userRole === "Media") {
+        roleData = await mediaModel.findOne({
+          userId: user._id,
+        });
+      }
+
+      return {
+        ...post.toObject(),
+        roleData,
+      };
+    }),
+  );
+
+  const formattedPosts = postsWithRoleData.map((post) => ({
+    ...post,
+  }));
 
   return res.status(200).json(
     new apiResponse(200, "Posts fetched successfully.", {
-      posts,
+      formattedPosts,
     }),
   );
 });

@@ -6,10 +6,7 @@ import {
   Play,
   MoreHorizontal,
   MapPin,
-  HeartPlusIcon,
-  HeartIcon,
 } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
 import TimeAgo from "./TimeAgo";
 import MediaPreviewModal from "./MediaPreviewModal";
 import { useState } from "react";
@@ -36,7 +33,8 @@ const FeedCard = ({ post, onLike }) => {
         <div className="flex items-center gap-3">
           <img
             src={
-              post?.userId?.profilePhoto || "https://i.pravatar.cc/150?img=12"
+              post?.userId?.profilePhoto ||
+              `https://ui-avatars.com/api/?name=${post?.userId?.userName}`
             }
             alt=""
             className="w-12 h-12 rounded-full object-cover"
@@ -44,17 +42,22 @@ const FeedCard = ({ post, onLike }) => {
 
           <div>
             <h2 className="font-semibold text-gray-900 dark:text-white">
-              {post?.userId?.fullName}
+              {post?.userId?.fullName || post?.userId?.userName}
             </h2>
 
             <p className="text-sm text-green-600">
-              Football Player • <TimeAgo date={post.createdAt} />
+              {post?.roleData?.sport},{" "}
+              {post?.roleData?.position || post?.userId?.userRole || "User"} •{" "}
+              <TimeAgo date={post.createdAt} />
             </p>
 
-            <div className="flex items-center gap-1 text-xs text-gray-500">
-              <MapPin size={13} />
-              Karachi, Pakistan
-            </div>
+            {post?.location?.city && (
+              <div className="flex items-center gap-1 text-xs text-gray-500">
+                <MapPin size={13} />
+                {post.location.city}
+                {post.location.country && `, ${post.location.country}`}
+              </div>
+            )}
           </div>
         </div>
 
@@ -126,7 +129,10 @@ const FeedCard = ({ post, onLike }) => {
 
       {/* Stats */}
       <div className="flex justify-between px-5 py-3 text-sm text-gray-500 border-b border-gray-200 dark:border-zinc-800">
-        <span>❤️ {post?.performance?.likes || 0} Likes</span>
+        <span className="flex gap-1">
+          <Heart size={20} fill={liked ? "red" : "none"} />
+          {post?.performance?.likes || 0} Likes
+        </span>
 
         <span>{post?.performance?.comments || 0} Comments</span>
       </div>
@@ -134,7 +140,7 @@ const FeedCard = ({ post, onLike }) => {
       {/* Actions */}
       <div className="grid grid-cols-4">
         <Action
-          icon={<Heart size={20} fill={liked ? "currentColor" : "none"} />}
+          icon={<Heart size={20} fill={liked ? "red" : "none"} />}
           label={likes}
           active={liked}
           onClick={() => onLike(post._id)}

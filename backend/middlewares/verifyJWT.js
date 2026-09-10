@@ -28,7 +28,9 @@ const verifyJWT = async (req, res, next) => {
       return next(error);
     }
 
-    const user = await userModel.findById(decoded.userId);
+    const user = await userModel
+      .findById(decoded.userId)
+      .select("-password -refreshToken -otp -otpExpiry");
 
     if (!user) {
       return next(new apiError(401, "User not found"));

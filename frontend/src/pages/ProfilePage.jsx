@@ -11,6 +11,7 @@ import FeedCard from "../components/FeedCard";
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+  const roleData = useSelector((state) => state.auth.roleData);
   const [coverPhotoUploadBox, setCoverPhotoUploadBox] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -55,6 +56,9 @@ const ProfilePage = () => {
   };
 
   const uploadCoverPhoto = async () => {
+    if (!coverPhoto) {
+      toast.error("First select image then upload");
+    }
     if (!coverPhoto) return;
 
     const formData = new FormData();
@@ -90,7 +94,12 @@ const ProfilePage = () => {
       try {
         const result = await api.get("/user/me");
 
-        dispatch(setUserData(result.data.data));
+        dispatch(
+          setUserData({
+            user: data.data.user,
+            roleData: data.data.roleData,
+          }),
+        );
       } catch (error) {
         console.error(error);
       }
@@ -99,8 +108,7 @@ const ProfilePage = () => {
       try {
         const result = await api.get("/post/getposts");
 
-        console.log(result.data.data.posts);
-        setPosts(result?.data?.data.posts);
+        setPosts(result?.data?.data.formattedPosts);
       } catch (error) {}
     };
 
@@ -209,7 +217,7 @@ const ProfilePage = () => {
       )}
 
       <NavBar />
-      <div className="md:pl-85 md:pr-85 px-2 h-screen dark:bg-[#1E1E1E] overflow-x-hidden">
+      {/* <div className="md:pl-85 md:pr-85 px-2 h-screen dark:bg-[#1E1E1E] overflow-x-hidden">
         <div className="flex pt-5 gap-5 ">
           <div className=" relative bg-white flex-1 mb-3 pb-5 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-2xl shadow-sm overflow-hidden">
             <div className="relative h-49.5 bg-linear-to-r from-green-600 via-green-500 to-emerald-400 overflow-hidden">
@@ -249,9 +257,139 @@ const ProfilePage = () => {
             <FeedCard key={post._id} post={post} />
           ))}
         </div>
+      </div> */}
+
+      <div className="md:pl-85 md:pr-85 px-2 dark:bg-[#1E1E1E] min-h-screen overflow-x-hidden">
+        <div className="flex pt-5 gap-5">
+          <div className="relative bg-white flex-1 mb-3 pb-5 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-2xl shadow-sm overflow-hidden">
+            {/* Cover */}
+            <div className="relative h-49.5 bg-linear-to-r from-green-600 via-green-500 to-emerald-400 overflow-hidden">
+              <img
+                src={user?.coverPhoto || ""}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+
+              <Pencil
+                className="text-zinc-900 absolute right-3 top-3 cursor-pointer"
+                onClick={() => setCoverPhotoUploadBox(true)}
+              />
+            </div>
+
+            {/* Profile Photo */}
+            <div className="absolute top-40 left-5">
+              <div className="-mt-10 flex justify-center">
+                <img
+                  onClick={() => setProfileUploaderBox(true)}
+                  src={
+                    user?.profilePhoto ||
+                    `https://ui-avatars.com/api/?name=${user?.userName}`
+                  }
+                  alt=""
+                  className="w-38 h-38 rounded-full border-4 border-white dark:border-zinc-900 object-cover cursor-pointer"
+                />
+              </div>
+            </div>
+
+            {/* Basic Info */}
+            <div className="mt-25 pl-7">
+              <h2 className="font-bold text-3xl text-gray-900 dark:text-white">
+                {user?.fullName || user?.userName}
+              </h2>
+
+              <p className="text-green-600 font-medium">
+                {roleData?.position || user?.userRole}
+              </p>
+
+              <div className="flex items-center gap-1 text-sm text-gray-500 mt-2">
+                <MapPin size={15} />
+
+                {user?.location?.country || "Location not specified"}
+
+                {user?.location?.district && `, ${user?.location?.district}`}
+              </div>
+            </div>
+
+            {/* Athlete Information */}
+            {user?.userRole === "Athlete" && roleData && (
+              <div className="px-7 mt-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <ProfileStat label="Sport" value={roleData.sport} />
+
+                  <ProfileStat label="Position" value={roleData.position} />
+
+                  <ProfileStat label="Height" value={roleData.height} />
+
+                  <ProfileStat label="Weight" value={roleData.weight} />
+
+                  <ProfileStat
+                    label="Jersey Number"
+                    value={roleData.jerseyNumber}
+                  />
+
+                  <ProfileStat label="Experience" value={roleData.experience} />
+
+                  <ProfileStat
+                    label="Dominant Foot"
+                    value={roleData.dominantFoot}
+                  />
+
+                  <ProfileStat
+                    label="Current Club"
+                    value={roleData.currentClub}
+                  />
+                </div>
+              </div>
+            )}
+
+            {roleData?.achievements?.length > 0 && (
+              <div className="px-7 mt-6">
+                <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
+                  Achievements
+                </h3>
+
+                <div className="mt-3 space-y-2">
+                  {roleData.achievements.map((achievement, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-3 bg-gray-50 dark:bg-zinc-800 rounded-xl p-3"
+                    >
+                      <div className="w-2 h-2 rounded-full bg-green-500" />
+
+                      <p className="text-gray-700 dark:text-gray-300">
+                        {achievement}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Posts */}
+        <div className="space-y-5">
+          {posts.map((post) => (
+            <FeedCard key={post._id} post={post} />
+          ))}
+        </div>
       </div>
     </>
   );
 };
 
 export default ProfilePage;
+
+const ProfileStat = ({ label, value }) => {
+  if (!value && value !== 0) return null;
+
+  return (
+    <div className="bg-gray-50 dark:bg-zinc-800 rounded-xl p-4">
+      <p className="text-xs text-gray-500 dark:text-gray-400">{label}</p>
+
+      <p className="mt-1 font-semibold text-gray-900 dark:text-white">
+        {value}
+      </p>
+    </div>
+  );
+};
