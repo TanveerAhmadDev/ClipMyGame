@@ -77,13 +77,23 @@ export const deletePost = asyncHandler(async (req, res) => {
     userId: req.user._id,
   });
 
+  const afterDeleteNewPostArray = await postModel.find({
+    userId: req.user._id,
+  });
+
   if (!post) {
     throw new apiError(404, "Post not found.");
   }
 
   return res
     .status(200)
-    .json(new apiResponse(200, "Post deleted successfully."));
+    .json(
+      new apiResponse(
+        200,
+        "Post deleted successfully.",
+        afterDeleteNewPostArray,
+      ),
+    );
 });
 //Home Feed
 export const posts = asyncHandler(async (req, res) => {

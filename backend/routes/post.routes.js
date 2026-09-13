@@ -6,8 +6,6 @@ import {
   getPost,
   getPostFilters,
   getPosts,
-  posts,
-  resolveExternalMedia,
   togglePostLike,
 } from "../controllers/post.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -22,12 +20,11 @@ postRouter.post(
   createPost,
 );
 
-postRouter.delete("/:id", deletePost);
+postRouter.delete("/:id", verifyJWT, deletePost);
 
 postRouter.get("/posts", verifyJWT, getPosts);
 postRouter.get("/getposts", verifyJWT, getPost);
 postRouter.get("/filters", getPostFilters);
 postRouter.post("/:postId/like", verifyJWT, togglePostLike);
-postRouter.post("/resolve-media", resolveExternalMedia);
 
 export default postRouter;

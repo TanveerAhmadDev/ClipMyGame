@@ -7,11 +7,13 @@ import { Camera, MapPin, Pencil, Upload, X } from "lucide-react";
 import { toast } from "react-toastify";
 import api from "../utils/axios";
 import FeedCard from "../components/FeedCard";
+import { setPosts } from "../features/post/postSlice";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const roleData = useSelector((state) => state.auth.roleData);
+  const posts = useSelector((state) => state.posts.posts || []);
   const [coverPhotoUploadBox, setCoverPhotoUploadBox] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -22,7 +24,8 @@ const ProfilePage = () => {
   const [profilePreview, setProfilePreview] = useState("");
 
   const [profileUploaderBox, setProfileUploaderBox] = useState(false);
-  const [posts, setPosts] = useState([]);
+
+  const [postOptionBox, setPostOptionBox] = useState(null);
 
   const handleCoverPhotoChange = (e) => {
     const file = e.target.files[0];
@@ -96,8 +99,8 @@ const ProfilePage = () => {
 
         dispatch(
           setUserData({
-            user: data.data.user,
-            roleData: data.data.roleData,
+            user: result?.data.data.user,
+            roleData: result?.data.data.roleData,
           }),
         );
       } catch (error) {
@@ -108,7 +111,7 @@ const ProfilePage = () => {
       try {
         const result = await api.get("/post/getposts");
 
-        setPosts(result?.data?.data.formattedPosts);
+        dispatch(setPosts(result?.data?.data.formattedPosts));
       } catch (error) {}
     };
 
@@ -217,47 +220,6 @@ const ProfilePage = () => {
       )}
 
       <NavBar />
-      {/* <div className="md:pl-85 md:pr-85 px-2 h-screen dark:bg-[#1E1E1E] overflow-x-hidden">
-        <div className="flex pt-5 gap-5 ">
-          <div className=" relative bg-white flex-1 mb-3 pb-5 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-2xl shadow-sm overflow-hidden">
-            <div className="relative h-49.5 bg-linear-to-r from-green-600 via-green-500 to-emerald-400 overflow-hidden">
-              <img src={user?.coverPhoto || ""} alt="" className="w-full " />
-              <Pencil
-                className="text-zinc-900 absolute right-3 top-3"
-                onClick={() => setCoverPhotoUploadBox(true)}
-              />
-            </div>
-            <div className="absolute top-40 left-5">
-              <div className="-mt-10 flex justify-center">
-                <img
-                  onClick={() => setProfileUploaderBox(true)}
-                  src={
-                    user?.profilePhoto ||
-                    `https://ui-avatars.com/api/?name=${user?.userName}`
-                  }
-                  alt=""
-                  className="w-38 h-38 rounded-full border-4 border-white dark:border-zinc-900 object-cover"
-                />
-              </div>
-            </div>
-            <div className="mt-25 pl-7">
-              <h2 className="font-bold text-3xl text-gray-900 dark:text-white">
-                {user?.fullName}
-              </h2>
-              <p className="text-green-600 font-medium">Football Player</p>
-              <div className="flex items-center  gap-1 text-sm text-gray-500 mt-2">
-                <MapPin size={15} />
-                {user?.location?.country}, {user?.location?.district}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="space-y-5">
-          {posts.map((post) => (
-            <FeedCard key={post._id} post={post} />
-          ))}
-        </div>
-      </div> */}
 
       <div className="md:pl-85 md:pr-85 px-2 dark:bg-[#1E1E1E] min-h-screen overflow-x-hidden">
         <div className="flex pt-5 gap-5">
@@ -298,7 +260,7 @@ const ProfilePage = () => {
               </h2>
 
               <p className="text-green-600 font-medium">
-                {roleData?.position || user?.userRole}
+                {roleData?.sport}, {roleData?.position || user?.userRole}
               </p>
 
               <div className="flex items-center gap-1 text-sm text-gray-500 mt-2">
@@ -315,25 +277,22 @@ const ProfilePage = () => {
               <div className="px-7 mt-6">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <ProfileStat label="Sport" value={roleData.sport} />
-
                   <ProfileStat label="Position" value={roleData.position} />
-
+                  <ProfileStat
+                    label="Status"
+                    value={user?.availabilityStatus}
+                  />
                   <ProfileStat label="Height" value={roleData.height} />
-
                   <ProfileStat label="Weight" value={roleData.weight} />
-
                   <ProfileStat
                     label="Jersey Number"
                     value={roleData.jerseyNumber}
                   />
-
                   <ProfileStat label="Experience" value={roleData.experience} />
-
                   <ProfileStat
                     label="Dominant Foot"
                     value={roleData.dominantFoot}
                   />
-
                   <ProfileStat
                     label="Current Club"
                     value={roleData.currentClub}
@@ -368,9 +327,16 @@ const ProfilePage = () => {
         </div>
 
         {/* Posts */}
+
         <div className="space-y-5">
           {posts.map((post) => (
-            <FeedCard key={post._id} post={post} />
+            <FeedCard
+              key={post._id}
+              post={post}
+              postOptionBox={postOptionBox}
+              setPostOptionBox={setPostOptionBox}
+              addSuffix={false}
+            />
           ))}
         </div>
       </div>

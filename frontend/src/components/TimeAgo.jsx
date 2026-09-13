@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 
-const TimeAgo = ({ date }) => {
+const TimeAgo = ({ date, addSuffix }) => {
   const [, setNow] = useState(Date.now());
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const TimeAgo = ({ date }) => {
   return (
     <>
       {formatDistanceToNow(new Date(date), {
-        addSuffix: true,
+        addSuffix: addSuffix,
       })}
     </>
   );

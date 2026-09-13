@@ -140,7 +140,7 @@ const HomePage = () => {
             ) : (
               posts.map((post, index) => (
                 <React.Fragment key={post._id}>
-                  <FeedCard post={post} onLike={handleLike} />
+                  <FeedCard post={post} onLike={handleLike} addSuffix={true} />
                   {/* * Banner after every * 3 posts. */}
                   {(index + 1) % bannerInterval === 0 && banners.length > 0 && (
                     <BannerCard
