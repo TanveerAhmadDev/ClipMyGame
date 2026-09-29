@@ -19,6 +19,7 @@ const FeedCard = ({
   postOptionBox,
   setPostOptionBox,
   addSuffix,
+  user,
 }) => {
   const images = post?.media?.filter((item) => item.type === "image") || [];
 
@@ -73,8 +74,11 @@ const FeedCard = ({
           <div className="flex items-center gap-3">
             <img
               src={
-                post?.userId?.profilePhoto ||
-                `https://ui-avatars.com/api/?name=${post?.userId?.userName}`
+                post?.userId?._id === user?._id
+                  ? user?.profilePhoto ||
+                    `https://ui-avatars.com/api/?name=${user?.userName}`
+                  : post?.userId?.profilePhoto ||
+                    `https://ui-avatars.com/api/?name=${post?.userId?.userName}`
               }
               alt=""
               className="w-12 h-12 rounded-full object-cover"
@@ -82,13 +86,16 @@ const FeedCard = ({
 
             <div>
               <h2 className="font-semibold text-gray-900 dark:text-white">
-                {post?.userId?.fullName || post?.userId?.userName}
+                {post?.userId?._id === user?._id
+                  ? user?.fullName || user?.userName
+                  : post?.userId?.fullName || post?.userId?.userName}
               </h2>
 
               <p className="text-sm text-green-600">
-                {post?.roleData?.sport},{" "}
-                {post?.roleData?.position || post?.userId?.userRole || "User"} •{" "}
-                <TimeAgo date={post.createdAt} addSuffix={addSuffix} />
+                {post?.userId?._id === user?._id
+                  ? user?.userRole || "User"
+                  : post?.userId?.userRole || "User"}{" "}
+                • <TimeAgo date={post.createdAt} addSuffix={addSuffix} />
               </p>
 
               {post?.location?.city && (

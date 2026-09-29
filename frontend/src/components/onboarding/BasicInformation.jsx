@@ -11,6 +11,17 @@ import { useSelector } from "react-redux";
 import InputField from "../InputFiled";
 import { Country, State } from "country-state-city";
 
+export const genderList = ["Male", "Female", "Others"];
+export const roleList = [
+  "Athlete",
+  "Coach",
+  "Scout",
+  "Referee",
+  "Agent",
+  "TeamOfficial",
+  "Media",
+];
+
 const BasicInformation = ({
   step,
   setStep,
@@ -25,17 +36,6 @@ const BasicInformation = ({
       [field]: value,
     }));
   };
-
-  const genderList = ["Male", "Female", "Others"];
-  const roleList = [
-    "Athlete",
-    "Coach",
-    "Scout",
-    "Referee",
-    "Agent",
-    "TeamOfficial",
-    "Media",
-  ];
 
   const countries = Country.getAllCountries();
   const selectedCountry = countries.find(

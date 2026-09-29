@@ -6,8 +6,8 @@ const InputField = ({
   ...props
 }) => {
   return (
-    <div className="mt-6">
-      <label className="font-semibold">{label}</label>
+    <div className="">
+      <label className="font-semibold dark:text-white">{label}</label>
 
       <div className="relative mt-2">
         {Icon && (
@@ -20,7 +20,7 @@ const InputField = ({
         {type === "select" ? (
           <select
             {...props}
-            className="w-full h-12 rounded-xl border pl-11 pr-4 outline-none  focus:border-green-600 dark:bg-zinc-950 dark:text-white"
+            className="w-full h-12 rounded-xl border pl-11 pr-4 outline-none  focus:border-green-600 dark:bg-zinc-800/50  focus:dark:bg-zinc-800 dark:text-white"
           >
             <option value="">Select {label}</option>
 
@@ -34,7 +34,7 @@ const InputField = ({
           <input
             type={type}
             {...props}
-            className="w-full h-12 rounded-xl border pl-11 pr-4 outline-none focus:border-green-600 dark:bg-zinc-950 dark:text-white"
+            className="w-full h-12 rounded-xl border pl-11 pr-4 outline-none focus:border-green-600 dark:bg-zinc-800/50 dark:border-zinc-500 dark:text-white"
           />
         )}
       </div>

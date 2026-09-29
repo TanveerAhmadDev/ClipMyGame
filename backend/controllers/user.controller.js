@@ -30,6 +30,60 @@ export const userData = asyncHandler(async (req, res) => {
   );
 });
 
+// export const completeBasicInformation = asyncHandler(async (req, res) => {
+//   const user = req.user;
+
+//   if (!user) {
+//     throw new apiError(404, "User not found");
+//   }
+
+//   // Parse JSON fields sent through FormData
+//   if (req.body.location) {
+//     req.body.location = JSON.parse(req.body.location);
+//   }
+
+//   if (req.body.languagesSpoken) {
+//     req.body.languagesSpoken = JSON.parse(req.body.languagesSpoken);
+//   }
+
+//   // Upload profile photo
+//   if (req.file) {
+//     const uploadedImage = await uploadToCloudinary(
+//       req.file.path,
+//       "ClipMyGame/ProfilePhotos",
+//     );
+
+//     user.profilePhoto = uploadedImage.secure_url.replace(
+//       "/upload/",
+//       "/upload/w_300,h_300,c_fill,f_auto,q_auto/",
+//     );
+
+//     fs.unlinkSync(req.file.path);
+//   }
+
+//   // Update user fields
+//   user.fullName = req.body.fullName;
+//   user.userRole = req.body.userRole;
+//   user.dateOfBirth = req.body.dateOfBirth;
+//   user.gender = req.body.gender;
+//   user.nationality = req.body.nationality;
+//   user.location = req.body.location;
+//   user.phoneNumber = req.body.phoneNumber;
+//   user.whatsappNumber = req.body.whatsappNumber;
+//   user.shortBio = req.body.shortBio;
+//   user.longBio = req.body.longBio;
+//   user.languagesSpoken = req.body.languagesSpoken;
+//   user.availabilityStatus = req.body.availabilityStatus;
+
+//   await user.save();
+
+//   return res
+//     .status(200)
+//     .json(
+//       new apiResponse(200, "Basic information updated successfully.", user),
+//     );
+// });
+
 export const completeBasicInformation = asyncHandler(async (req, res) => {
   const user = req.user;
 
@@ -39,14 +93,22 @@ export const completeBasicInformation = asyncHandler(async (req, res) => {
 
   // Parse JSON fields sent through FormData
   if (req.body.location) {
-    req.body.location = JSON.parse(req.body.location);
+    try {
+      req.body.location = JSON.parse(req.body.location);
+    } catch (error) {
+      throw new apiError(400, "Invalid location format");
+    }
   }
 
   if (req.body.languagesSpoken) {
-    req.body.languagesSpoken = JSON.parse(req.body.languagesSpoken);
+    try {
+      req.body.languagesSpoken = JSON.parse(req.body.languagesSpoken);
+    } catch (error) {
+      throw new apiError(400, "Invalid languages format");
+    }
   }
 
-  // Upload profile photo
+  // Upload profile photo only if a new photo was selected
   if (req.file) {
     const uploadedImage = await uploadToCloudinary(
       req.file.path,
@@ -75,13 +137,28 @@ export const completeBasicInformation = asyncHandler(async (req, res) => {
   user.languagesSpoken = req.body.languagesSpoken;
   user.availabilityStatus = req.body.availabilityStatus;
 
+  // Profile is now completed
+  user.isProfileCompleted = true;
+
   await user.save();
 
-  return res
-    .status(200)
-    .json(
-      new apiResponse(200, "Basic information updated successfully.", user),
-    );
+  let roleData = null;
+
+  if (user.userRole === "Athlete") {
+    roleData = await athleteModel.findOne({ userId: user._id });
+  } else if (user.userRole === "Media") {
+    roleData = await mediaModel.findOne({ userId: user._id });
+  }
+
+  return res.status(200).json({
+    success: true,
+    statusCode: 200,
+    data: {
+      user,
+      roleData,
+    },
+    message: "Basic information updated successfully.",
+  });
 });
 
 export const coverImage = asyncHandler(async (req, res) => {

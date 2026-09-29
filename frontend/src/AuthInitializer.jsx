@@ -11,7 +11,6 @@ const AuthInitializer = ({ children }) => {
       try {
         const token = localStorage.getItem("accessToken");
 
-        // No token = definitely not logged in
         if (!token) {
           dispatch(setAuthLoading(false));
           return;

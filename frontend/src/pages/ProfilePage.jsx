@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import api from "../utils/axios";
 import FeedCard from "../components/FeedCard";
 import { setPosts } from "../features/post/postSlice";
+import ProfileEdit from "../components/profile/profileEdit";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
@@ -24,8 +25,71 @@ const ProfilePage = () => {
   const [profilePreview, setProfilePreview] = useState("");
 
   const [profileUploaderBox, setProfileUploaderBox] = useState(false);
+  const [profileEditBox, setProfileEditBox] = useState(false);
 
   const [postOptionBox, setPostOptionBox] = useState(null);
+
+  const [profileData, setProfileData] = useState({
+    fullName: "",
+    userName: "",
+    profilePhoto: null,
+    userRole: "",
+    dateOfBirth: "",
+    gender: "",
+
+    location: {
+      country: "",
+      state: "",
+      district: "",
+      gps: {
+        latitude: null,
+        longitude: null,
+      },
+    },
+
+    phoneNumber: "",
+    whatsappNumber: "",
+    shortBio: "",
+    longBio: "",
+    languagesSpoken: [],
+    availabilityStatus: "Available",
+  });
+
+  const openProfileEdit = () => {
+    setProfileData({
+      fullName: user?.fullName || "",
+      userName: user?.userName || "",
+      profilePhoto: null,
+
+      userRole: user?.userRole || "",
+
+      dateOfBirth: user?.dateOfBirth ? user.dateOfBirth.split("T")[0] : "",
+
+      gender: user?.gender || "",
+
+      location: {
+        country: user?.location?.country || "",
+        state: user?.location?.state || "",
+        district: user?.location?.district || "",
+        gps: {
+          latitude: user?.location?.gps?.latitude ?? null,
+          longitude: user?.location?.gps?.longitude ?? null,
+        },
+      },
+
+      phoneNumber: user?.phoneNumber || "",
+      whatsappNumber: user?.whatsappNumber || "",
+
+      shortBio: user?.shortBio || "",
+      longBio: user?.longBio || "",
+
+      languagesSpoken: [...(user?.languagesSpoken || [])],
+
+      availabilityStatus: user?.availabilityStatus || "Available",
+    });
+
+    setProfileEditBox(true);
+  };
 
   const handleCoverPhotoChange = (e) => {
     const file = e.target.files[0];
@@ -120,7 +184,7 @@ const ProfilePage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (coverPhotoUploadBox || profileUploaderBox) {
+    if (coverPhotoUploadBox || profileUploaderBox || profileEditBox) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
@@ -129,23 +193,31 @@ const ProfilePage = () => {
     return () => {
       document.body.style.overflow = "auto";
     };
-  }, [coverPhotoUploadBox, profileUploaderBox]);
+  }, [coverPhotoUploadBox, profileUploaderBox, profileEditBox]);
 
   return (
     <>
       {coverPhotoUploadBox && (
         <>
-          <div className="bg-[rgba(0,0,0,0.75)] w-full h-screen absolute z-60" />
-          <div className="absolute top-20 left-1/2 -translate-x-1/2 w-100 md:w-200 z-61 h-80.75 rounded-xl bg-white flex flex-col overflow-hidden">
+          <div
+            onClick={() => setCoverPhotoUploadBox(false)}
+            className="bg-[rgba(0,0,0,0.75)] w-full h-screen absolute z-60"
+          />
+          <div className="dark:bg-[#1E1E1E] absolute top-20 left-1/2 -translate-x-1/2 w-90 md:w-200 z-61 h-[36vh] md:h-80.75 rounded-xl bg-white flex flex-col overflow-hidden">
             <header className="h-12.5 pr-6 pl-6 pt-3 pb-3 flex justify-between items-center">
-              <h1 className="text-[20px] font-semibold">Cover Photo</h1>
-              <X onClick={() => setCoverPhotoUploadBox(false)} />
+              <h1 className="dark:text-zinc-400 text-[20px] font-semibold">
+                Cover Photo
+              </h1>
+              <X
+                onClick={() => setCoverPhotoUploadBox(false)}
+                className="dark:text-zinc-400"
+              />
             </header>
-            <div className="relative h-49.5 bg-linear-to-r from-green-600 via-green-500 to-emerald-400">
+            <div className="relative h-30 md:h-49.5 bg-linear-to-r from-green-600 via-green-500 to-emerald-400">
               <img
                 src={coverPreview || user?.coverPhoto}
                 alt="Cover"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-top"
               />
             </div>
             <div className="flex justify-center flex-1 items-center">
@@ -219,6 +291,14 @@ const ProfilePage = () => {
         </>
       )}
 
+      {profileEditBox && (
+        <ProfileEdit
+          setProfileEditBox={setProfileEditBox}
+          profileData={profileData}
+          setProfileData={setProfileData}
+        />
+      )}
+
       <NavBar />
 
       <div className="md:pl-85 md:pr-85 px-2 dark:bg-[#1E1E1E] min-h-screen overflow-x-hidden">
@@ -255,9 +335,15 @@ const ProfilePage = () => {
 
             {/* Basic Info */}
             <div className="mt-25 pl-7">
-              <h2 className="font-bold text-3xl text-gray-900 dark:text-white">
-                {user?.fullName || user?.userName}
-              </h2>
+              <div className=" relative">
+                <h2 className="font-bold text-3xl text-gray-900 dark:text-white flex items-center gap-2 relative ">
+                  {user?.fullName || user?.userName}
+                  <Pencil
+                    onClick={openProfileEdit}
+                    className="text-zinc-500 dark:text-zinc-200 cursor-pointer "
+                  />
+                </h2>
+              </div>
 
               <p className="text-green-600 font-medium">
                 {roleData?.sport}, {roleData?.position || user?.userRole}
@@ -333,6 +419,7 @@ const ProfilePage = () => {
             <FeedCard
               key={post._id}
               post={post}
+              user={user}
               postOptionBox={postOptionBox}
               setPostOptionBox={setPostOptionBox}
               addSuffix={false}
