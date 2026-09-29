@@ -15,6 +15,12 @@ import TextAreaField from "../TextAreaField";
 import PhoneField from "../PhoneField";
 import OnBoardingBtn from "./OnBoardingBtn";
 
+export const availabilityList = [
+  "Available",
+  "Contracted",
+  "Retired",
+  "Student",
+];
 const ContactInformation = ({
   step,
   setStep,
@@ -22,8 +28,6 @@ const ContactInformation = ({
   setProfileData,
   user,
 }) => {
-  const availabilityList = ["Available", "Contracted", "Retired", "Student"];
-
   return (
     <>
       <div className="p-10">

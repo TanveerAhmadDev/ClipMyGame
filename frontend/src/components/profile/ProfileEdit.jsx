@@ -1,4 +1,13 @@
-import { Briefcase, Calendar, Globe, MapPinned, User, X } from "lucide-react";
+import {
+  Briefcase,
+  Calendar,
+  FileText,
+  Globe,
+  MapPinned,
+  PhoneCall,
+  User,
+  X,
+} from "lucide-react";
 import InputField from "../InputFiled";
 import api from "../../utils/axios";
 import { useState } from "react";
@@ -7,6 +16,11 @@ import { genderList, roleList } from "../onboarding/BasicInformation";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserData } from "../../features/auth/authSlice";
 import { toast } from "react-toastify";
+import PhoneField from "../PhoneField";
+import TagInput from "../TagInput";
+import TextAreaField from "../TextAreaField";
+import { availabilityList } from "../onboarding/ContactInformation";
+import { FaWhatsapp } from "react-icons/fa";
 
 const ProfileEdit = ({ setProfileEditBox, profileData, setProfileData }) => {
   const dispatch = useDispatch();
@@ -172,6 +186,83 @@ const ProfileEdit = ({ setProfileEditBox, profileData, setProfileData }) => {
             disabled={!profileData?.location?.country}
           />
 
+          <TextAreaField
+            label="Short Bio"
+            icon={FileText}
+            value={profileData.shortBio}
+            placeholder="Tell everyone about yourself..."
+            maxLength={250}
+            minHeight={50}
+            maxHeight={200}
+            onChange={(e) =>
+              setProfileData({
+                ...profileData,
+                shortBio: e.target.value,
+              })
+            }
+          />
+          <TextAreaField
+            label="Long Bio"
+            icon={FileText}
+            value={profileData.longBio}
+            placeholder="Tell everyone about yourself in deatil..."
+            maxLength={1000}
+            minHeight={150}
+            maxHeight={320}
+            onChange={(e) =>
+              setProfileData({
+                ...profileData,
+                longBio: e.target.value,
+              })
+            }
+          />
+
+          <TagInput
+            label="Languages Spoken"
+            value={profileData.languagesSpoken}
+            onChange={(languages) =>
+              setProfileData({
+                ...profileData,
+                languagesSpoken: languages,
+              })
+            }
+          />
+          <InputField
+            label={"Availability"}
+            type="select"
+            options={availabilityList}
+            value={profileData?.availabilityStatus}
+            onChange={(e) =>
+              setProfileData({
+                ...profileData,
+                availabilityStatus: e.target.value,
+              })
+            }
+          />
+
+          <PhoneField
+            label="Phone Number"
+            icon={PhoneCall}
+            value={profileData?.phoneNumber}
+            onChange={(value) =>
+              setProfileData({
+                ...profileData,
+                phoneNumber: value || "",
+              })
+            }
+          />
+
+          <PhoneField
+            label="WhatsApp Number"
+            icon={FaWhatsapp}
+            value={profileData?.whatsappNumber}
+            onChange={(value) =>
+              setProfileData({
+                ...profileData,
+                whatsappNumber: value || "",
+              })
+            }
+          />
           {/* other fields */}
         </div>
 

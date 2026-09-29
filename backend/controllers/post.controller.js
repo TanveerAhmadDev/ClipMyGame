@@ -6,9 +6,9 @@ import uploadToCloudinary from "../utils/uploadToCloudinary.js";
 import postLikeModel from "../models/postLike.model.js";
 import axios from "axios";
 import * as cheerio from "cheerio";
-import userModel from "../models/user.model.js";
 import athleteModel from "../models/athlete.model.js";
 import mediaModel from "../models/media.model.js";
+import commentModel from "../models/comment.model.js";
 
 // Create Post
 export const createPost = asyncHandler(async (req, res) => {
@@ -94,35 +94,6 @@ export const deletePost = asyncHandler(async (req, res) => {
         afterDeleteNewPostArray,
       ),
     );
-});
-//Home Feed
-export const posts = asyncHandler(async (req, res) => {
-  const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 10;
-
-  const skip = (page - 1) * limit;
-
-  const posts = await postModel
-    .find()
-    .populate("userId", "userName fullName profilePhoto userRole isVerified")
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limit);
-
-  const totalPosts = await postModel.countDocuments();
-
-  return res.status(200).json(
-    new apiResponse(200, "Posts fetched successfully.", {
-      posts,
-      pagination: {
-        currentPage: page,
-        totalPages: Math.ceil(totalPosts / limit),
-        totalPosts,
-        hasNextPage: page * limit < totalPosts,
-        hasPreviousPage: page > 1,
-      },
-    }),
-  );
 });
 
 // export const getPosts = asyncHandler(async (req, res) => {
@@ -229,6 +200,92 @@ export const posts = asyncHandler(async (req, res) => {
 //   );
 // });
 
+//Home Feed
+
+// export const posts = asyncHandler(async (req, res) => {
+//   const page = Number(req.query.page) || 1;
+//   const limit = Number(req.query.limit) || 10;
+
+//   const skip = (page - 1) * limit;
+
+//   const posts = await postModel
+//     .find()
+//     .populate("userId", "userName fullName profilePhoto userRole isVerified")
+//     .sort({ createdAt: -1 })
+//     .skip(skip)
+//     .limit(limit);
+
+//   const totalPosts = await postModel.countDocuments();
+
+//   return res.status(200).json(
+//     new apiResponse(200, "Posts fetched successfully.", {
+//       posts,
+//       pagination: {
+//         currentPage: page,
+//         totalPages: Math.ceil(totalPosts / limit),
+//         totalPosts,
+//         hasNextPage: page * limit < totalPosts,
+//         hasPreviousPage: page > 1,
+//       },
+//     }),
+//   );
+// });
+
+export const posts = asyncHandler(async (req, res) => {
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+
+  const skip = (page - 1) * limit;
+
+  const posts = await postModel
+    .find()
+    .populate("userId", "userName fullName profilePhoto userRole isVerified")
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const totalPosts = await postModel.countDocuments();
+
+  // Get all post IDs
+  const postIds = posts.map((post) => post._id);
+
+  // Get all comments for these posts in ONE query
+  const comments = await commentModel
+    .find({
+      post: { $in: postIds },
+    })
+    .populate("user", "userName fullName profilePhoto")
+    .sort({ createdAt: -1 });
+
+  // Attach comments to their posts
+  const postsWithComments = posts.map((post) => {
+    const postObject = post.toObject();
+
+    const postComments = comments.filter(
+      (comment) => comment.post.toString() === post._id.toString(),
+    );
+
+    return {
+      ...postObject,
+      comments: postComments,
+    };
+  });
+
+  return res.status(200).json(
+    new apiResponse(200, "Posts fetched successfully.", {
+      posts: postsWithComments,
+
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(totalPosts / limit),
+        totalPosts,
+        hasNextPage: page * limit < totalPosts,
+        hasPreviousPage: page > 1,
+      },
+    }),
+  );
+});
+
 export const getPosts = asyncHandler(async (req, res) => {
   const {
     sport,
@@ -323,12 +380,40 @@ export const getPosts = asyncHandler(async (req, res) => {
 
   const likedPostIds = new Set(userLikes.map((like) => like.postId.toString()));
 
-  // Add liked status
-  const formattedPosts = postsWithRoleData.map((post) => ({
-    ...post,
+  // // Add liked status
+  // const formattedPosts = postsWithRoleData.map((post) => ({
+  //   ...post,
 
-    liked: likedPostIds.has(post._id.toString()),
-  }));
+  //   liked: likedPostIds.has(post._id.toString()),
+  // }));
+
+  // return res.status(200).json(
+  //   new apiResponse(200, "Posts fetched successfully.", {
+  //     posts: formattedPosts,
+  //   }),
+  // );
+
+  const comments = await commentModel
+    .find({
+      post: { $in: postIds },
+    })
+    .populate("user", "userName fullName profilePhoto")
+    .sort({ createdAt: -1 });
+
+  // Add comments + liked status
+  const formattedPosts = postsWithRoleData.map((post) => {
+    const postComments = comments.filter(
+      (comment) => comment.post.toString() === post._id.toString(),
+    );
+
+    return {
+      ...post,
+
+      liked: likedPostIds.has(post._id.toString()),
+
+      comments: postComments,
+    };
+  });
 
   return res.status(200).json(
     new apiResponse(200, "Posts fetched successfully.", {

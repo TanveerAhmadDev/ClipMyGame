@@ -12,6 +12,8 @@ import MediaPreviewModal from "./MediaPreviewModal";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import api from "../utils/axios";
+import CommentBox from "./CommentBox";
+import { useSelector } from "react-redux";
 
 const FeedCard = ({
   post,
@@ -21,12 +23,17 @@ const FeedCard = ({
   addSuffix,
   user,
 }) => {
+  if (!user) {
+    user = useSelector((state) => state.auth.user);
+  }
   const images = post?.media?.filter((item) => item.type === "image") || [];
 
   const videos = post?.media?.filter((item) => item.type === "video") || [];
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [commentBox, setCommentBox] = useState(false);
 
   const openPreview = (index) => {
     setCurrentIndex(index);
@@ -197,7 +204,11 @@ const FeedCard = ({
             active={liked}
             onClick={() => onLike(post._id)}
           />
-          <Action icon={<MessageCircle size={20} />} label="Comment" />
+          <Action
+            icon={<MessageCircle size={20} />}
+            label="Comment"
+            onClick={() => setCommentBox((prev) => !prev)}
+          />
           <Action icon={<Share2 size={20} />} label="Share" />
           <Action icon={<Bookmark size={20} />} label="Save" />
         </div>
@@ -208,6 +219,7 @@ const FeedCard = ({
           setCurrentIndex={setCurrentIndex}
           onClose={() => setPreviewOpen(false)}
         />
+        {commentBox && <CommentBox user={user} post={post} />}
       </div>
     </>
   );

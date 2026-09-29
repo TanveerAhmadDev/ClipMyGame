@@ -4,9 +4,9 @@ import "react-phone-number-input/style.css";
 const PhoneField = ({ label, value, onChange, icon: Icon }) => {
   return (
     <div className="mt-6">
-      <label className="font-semibold">{label}</label>
+      <label className="font-semibold dark:text-white">{label}</label>
 
-      <div className="relative mt-2 h-12 rounded-xl border border-gray-300 dark:border-zinc-700 bg-white dark:bg-zinc-950">
+      <div className="relative mt-2 h-12 rounded-xl border bg-white dark:bg-zinc-800/50 dark:border-zinc-500">
         {Icon && (
           <Icon
             size={18}
@@ -18,7 +18,7 @@ const PhoneField = ({ label, value, onChange, icon: Icon }) => {
           // international
           value={value}
           onChange={onChange}
-          className="h-full w-full pl-11 pr-4 flex items-center"
+          className="h-full w-full pl-11 pr-4 flex items-center outline-0 dark:text-white"
         />
       </div>
     </div>

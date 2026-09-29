@@ -19,7 +19,7 @@ const TextAreaField = ({
 
   return (
     <div className="mt-6 flex-1">
-      <label className="font-semibold">{label}</label>
+      <label className="font-semibold dark:text-white">{label}</label>
 
       <div className="relative mt-2">
         {Icon && (
@@ -32,7 +32,7 @@ const TextAreaField = ({
           placeholder={placeholder}
           maxLength={maxLength}
           style={{ minHeight: `${minHeight}px` }}
-          className="w-full rounded-xl border pl-11 pr-4 pt-4  outline-none resize-none overflow-y-auto focus:border-green-600 dark:bg-zinc-950 dark:text-white"
+          className="w-full rounded-xl border pl-11 pr-4 pt-4  outline-none resize-none overflow-y-auto focus:border-green-600  dark:text-white dark:bg-zinc-800/50 dark:border-zinc-500 "
         />
       </div>
 

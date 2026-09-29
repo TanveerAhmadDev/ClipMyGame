@@ -23,14 +23,14 @@ const TagInput = ({ label, value = [], onChange, placeholder }) => {
 
   return (
     <div className="mt-6">
-      <label className="font-semibold">{label}</label>
+      <label className="font-semibold dark:text-white">{label}</label>
 
       <div className="mt-2 min-h-12 rounded-xl border border-gray-300 dark:border-zinc-700 p-3 focus-within:border-green-600">
         <div className="flex flex-wrap gap-2">
           {value.map((language) => (
             <span
               key={language}
-              className="flex items-center gap-1 rounded-lg bg-green-100 text-green-700 px-3 py-1 text-sm"
+              className="flex items-center gap-1 rounded-lg bg-green-700 text-green-100 px-3 py-1 text-sm"
             >
               {language}
 
@@ -51,7 +51,7 @@ const TagInput = ({ label, value = [], onChange, placeholder }) => {
                 addLanguage();
               }
             }}
-            className="flex-1 min-w-40 bg-transparent outline-none"
+            className="flex-1 min-w-40 bg-transparent outline-none  dark:border-zinc-500"
           />
         </div>
       </div>
