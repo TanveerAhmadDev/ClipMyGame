@@ -34,3 +34,59 @@ export const addcomment = asyncHandler(async (req, res, next) => {
     .status(201)
     .json(new apiResponse(201, createdComment, "Comment added successfully"));
 });
+
+export const likeComment = asyncHandler(async (req, res) => {
+  const { commentId } = req.body;
+
+  if (!commentId) {
+    throw new apiError(400, "Comment ID is required");
+  }
+
+  // Check comment exists
+  const comment = await commentModel.findById(commentId);
+
+  if (!comment) {
+    throw new apiError(404, "Comment not found");
+  }
+
+  // Check if user already liked it
+  const existingLike = await commentLikeModel.findOne({
+    commentId,
+    userId: req.user._id,
+  });
+
+  if (existingLike) {
+    throw new apiError(400, "You already liked this comment");
+  }
+
+  // Create like
+  const like = await commentLikeModel.create({
+    commentId,
+    userId: req.user._id,
+  });
+
+  return res
+    .status(201)
+    .json(new apiResponse(201, like, "Comment liked successfully"));
+});
+
+export const unlikeComment = asyncHandler(async (req, res) => {
+  const { commentId } = req.body;
+
+  if (!commentId) {
+    throw new apiError(400, "Comment ID is required");
+  }
+
+  const deletedLike = await commentLikeModel.findOneAndDelete({
+    commentId,
+    userId: req.user._id,
+  });
+
+  if (!deletedLike) {
+    throw new apiError(400, "Comment is not liked");
+  }
+
+  return res
+    .status(200)
+    .json(new apiResponse(200, null, "Comment unliked successfully"));
+});

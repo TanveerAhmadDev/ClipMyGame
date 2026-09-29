@@ -8,6 +8,52 @@ const CommentBox = ({ user, post }) => {
 
   const inputRef = useRef(null);
 
+  const handleLikeComment = async (commentId) => {
+    try {
+      const comment = comments.find((item) => item._id === commentId);
+
+      if (!comment) return;
+
+      if (comment.liked) {
+        // Unlike
+        await api.post("comment/unlike", {
+          commentId,
+        });
+
+        setComments((prev) =>
+          prev.map((item) =>
+            item._id === commentId
+              ? {
+                  ...item,
+                  liked: false,
+                  likeCount: Math.max(0, item.likeCount - 1),
+                }
+              : item,
+          ),
+        );
+      } else {
+        // Like
+        await api.post("comment/like", {
+          commentId,
+        });
+
+        setComments((prev) =>
+          prev.map((item) =>
+            item._id === commentId
+              ? {
+                  ...item,
+                  liked: true,
+                  likeCount: item.likeCount + 1,
+                }
+              : item,
+          ),
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -67,6 +113,7 @@ const CommentBox = ({ user, post }) => {
                 <div className="flex items-center gap-4 mt-1 ml-2 text-xs text-zinc-500">
                   <button
                     type="button"
+                    onClick={handleLikeComment(item?._id)}
                     className="hover:text-blue-600 font-medium"
                   >
                     Like

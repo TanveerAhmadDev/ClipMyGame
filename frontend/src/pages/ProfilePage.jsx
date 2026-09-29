@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import api from "../utils/axios";
 import FeedCard from "../components/FeedCard";
 import { setPosts } from "../features/post/postSlice";
-import ProfileEdit from "../components/profile/profileEdit";
+import ProfileEdit from "../components/profile/ProfileEdit";
 
 const ProfilePage = () => {
   const dispatch = useDispatch();
