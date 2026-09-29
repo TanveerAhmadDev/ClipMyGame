@@ -26,9 +26,19 @@ const postsSlice = createSlice({
         post.performance.likes = likes;
       }
     },
+    updatePostComments: (state, action) => {
+      const { postId, comments } = action.payload;
+
+      const post = state.posts.find((post) => post._id === postId);
+
+      if (post) {
+        post.performance.comments = comments;
+      }
+    },
   },
 });
 
-export const { setPosts, addPost, updatePostLike } = postsSlice.actions;
+export const { setPosts, addPost, updatePostLike, updatePostComments } =
+  postsSlice.actions;
 
 export default postsSlice.reducer;
