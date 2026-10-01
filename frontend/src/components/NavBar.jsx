@@ -48,8 +48,8 @@ const NavBar = ({ setIsPosting }) => {
 
   return (
     <>
-      <nav className=" w-full max-w-full md:px-40 overflow-x-hidden fixed -bottom-1 md:sticky md:top-0 border-t md:border-t-0  md:border-b z-50 bg-white dark:bg-[#1E1E1E] border-gray-200 dark:border-zinc-700 shadow-sm transition-colors duration-300 ">
-        <div className=" w-full max-w-full h-16 flex items-center overflow-hidden ">
+      <nav className="w-full max-w-full md:px-40 fixed -bottom-1 md:sticky md:top-0 border-t md:border-t-0 md:border-b z-50 bg-white dark:bg-[#1E1E1E] border-gray-200 dark:border-zinc-700 shadow-sm transition-colors duration-300 overflow-visible">
+        <div className="w-full max-w-full h-16 flex items-center overflow-visible">
           <div className=" hidden md:flex items-center gap-4 shrink-0 ">
             <img
               src="/eeimg.png"
