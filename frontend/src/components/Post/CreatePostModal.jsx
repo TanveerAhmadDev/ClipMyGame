@@ -213,6 +213,7 @@ const CreatePostModal = ({ open, onClose, user }) => {
         removeMedia={removeMedia}
         handleNext={handleNext}
         tryAgain={tryAgain}
+        setSelectedFiles={setSelectedFiles}
       />
     </>
   );

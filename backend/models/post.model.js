@@ -24,8 +24,13 @@ const postSchema = new mongoose.Schema(
 
         type: {
           type: String,
-          enum: ["image", "video"],
+          enum: ["image", "video", "external"],
           required: true,
+        },
+
+        platform: {
+          type: String,
+          enum: ["youtube", "facebook"],
         },
       },
     ],

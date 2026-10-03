@@ -29,6 +29,8 @@ const FeedCard = ({
   const images = post?.media?.filter((item) => item.type === "image") || [];
 
   const videos = post?.media?.filter((item) => item.type === "video") || [];
+  const externalMedia =
+    post?.media?.filter((item) => item.type === "external") || [];
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -101,7 +103,7 @@ const FeedCard = ({
               <p className="text-sm text-green-600">
                 {post?.userId?._id === user?._id
                   ? user?.userRole || "User"
-                  : post?.userId?.userRole || "User"}{" "}
+                  : post?.userId?.userRole || "User"}
                 • <TimeAgo date={post.createdAt} addSuffix={addSuffix} />
               </p>
 
@@ -133,7 +135,7 @@ const FeedCard = ({
         </div>
 
         {/* Video */}
-        <div className="relative">
+        {/* <div className="relative">
           {images.length > 0 ? (
             <div
               className={`grid gap-1 overflow-hidden rounded-xl ${
@@ -182,6 +184,66 @@ const FeedCard = ({
                   <Play fill="white" className="text-white ml-1" size={30} />
                 </div>
               </button>
+            </div>
+          ) : null}
+        </div> */}
+
+        {/* Media */}
+        <div className="relative">
+          {images.length > 0 ? (
+            <div
+              className={`grid gap-1 overflow-hidden rounded-xl ${
+                images.length === 1 ? "grid-cols-1" : "grid-cols-2"
+              }`}
+            >
+              {images.slice(0, 4).map((item, index) => (
+                <div key={item._id || index} className="relative">
+                  <img
+                    src={item.url}
+                    alt=""
+                    onClick={() => openPreview(index)}
+                    className={`cursor-pointer object-cover w-full ${
+                      images.length === 1 ? "h-130" : "h-65"
+                    }`}
+                  />
+
+                  {index === 3 && images.length > 4 && (
+                    <div
+                      onClick={() => openPreview(index)}
+                      className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-4xl font-bold cursor-pointer"
+                    >
+                      +{images.length - 4}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : videos.length > 0 ? (
+            <div className="relative">
+              <video
+                src={videos[0].url}
+                onClick={() => openPreview(0)}
+                className="w-full max-h-162.5 object-cover cursor-pointer"
+              />
+
+              <button
+                onClick={() => openPreview(0)}
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                <div className="w-18 h-18 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center">
+                  <Play fill="white" className="text-white ml-1" size={30} />
+                </div>
+              </button>
+            </div>
+          ) : externalMedia.length > 0 ? (
+            <div className="w-full aspect-video bg-black rounded-xl overflow-hidden">
+              <iframe
+                src={externalMedia[0].url}
+                title={`${externalMedia[0].platform} video`}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
             </div>
           ) : null}
         </div>

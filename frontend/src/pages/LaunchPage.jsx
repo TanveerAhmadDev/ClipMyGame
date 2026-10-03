@@ -640,7 +640,7 @@ const LaunchPage = () => {
                 Simple by design
               </p>
               <h2 className="mt-4 text-5xl sm:text-6xl lg:text-8xl font-black tracking-[-0.06em] leading-[0.88]">
-                FROM <br /> <span className="text-zinc-400">CLIP</span> <br />{" "}
+                FROM <br /> <span className="text-zinc-400">CLIP</span> <br />
                 TO <br />
                 <span className="text-green-600">OPPORTUNITY.</span>
               </h2>

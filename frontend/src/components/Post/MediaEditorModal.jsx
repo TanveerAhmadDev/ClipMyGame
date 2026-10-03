@@ -15,58 +15,57 @@ const MediaEditorModal = ({
   removeMedia,
   handleNext,
   tryAgain,
-  onAddExternalMedia,
+  setSelectedFiles,
 }) => {
   const [source, setSource] = useState(null);
-  const [externalUrl, setExternalUrl] = useState("");
-  const [externalError, setExternalError] = useState("");
+  const [externalMedia, setExternalMedia] = useState("");
 
-  const handleAddExternalMedia = async () => {
-    const url = externalUrl.trim();
+  const handleAddExternalMedia = () => {
+    if (!externalMedia.trim()) return;
 
-    if (!url) {
-      setExternalError("Please enter a media URL.");
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(externalMedia, "text/html");
+
+    const iframe = doc.querySelector("iframe");
+
+    if (!iframe) {
+      alert("Please paste a valid iframe embed code.");
       return;
     }
 
-    try {
-      new URL(url);
-    } catch {
-      setExternalError("Please enter a valid URL.");
+    const src = iframe.getAttribute("src");
+
+    if (!src) {
+      alert("Invalid iframe code.");
       return;
     }
 
-    try {
-      setExternalError("");
+    let platform = "";
 
-      const { data } = await api.post("/post/resolve-media", {
-        url,
-      });
-
-      const media = data.data;
-
-      const externalMedia = {
-        id: crypto.randomUUID(),
-        source: "external",
-        url: media.url,
-        preview: media.url,
-        type: media.type,
-      };
-
-      if (onAddExternalMedia) {
-        onAddExternalMedia(externalMedia);
-      }
-
-      setExternalUrl("");
-      setSource(null);
-    } catch (error) {
-      console.log(error);
-
-      setExternalError(
-        error.response?.data?.message || "Unable to load this media URL.",
-      );
+    if (src.includes("youtube.com") || src.includes("youtube-nocookie.com")) {
+      platform = "youtube";
+    } else if (src.includes("facebook.com") || src.includes("fb.watch")) {
+      platform = "facebook";
+    } else {
+      alert("Only YouTube and Facebook embeds are supported.");
+      return;
     }
+
+    const newMedia = {
+      type: "external",
+      platform,
+      url: src,
+      preview: src,
+    };
+
+    setSelectedFiles((prev) => [...prev, newMedia]);
+
+    setActiveIndex(selectedFiles.length);
+
+    setExternalMedia("");
+    setSource(null);
   };
+
   if (!mediaUploadBox) return null;
   return (
     <>
@@ -145,11 +144,18 @@ const MediaEditorModal = ({
                   className="max-w-full max-h-full object-contain"
                   alt="Preview"
                 />
-              ) : (
+              ) : selectedFiles[activeIndex]?.type === "video" ? (
                 <video
                   controls
                   src={selectedFiles[activeIndex].preview}
                   className="max-w-full max-h-full object-contain"
+                />
+              ) : (
+                <iframe
+                  src={selectedFiles[activeIndex]?.url}
+                  title="External media preview"
+                  className="w-full h-full max-w-4xl rounded-xl"
+                  allowFullScreen
                 />
               )}
             </div>
@@ -197,73 +203,69 @@ const MediaEditorModal = ({
               className="absolute inset-0 z-20 bg-black/20"
               onClick={() => setSource(null)}
             />
-            <div className=" absolute z-30 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-120 bg-white rounded-2xl shadow-2xl border border-zinc-200 p-5 ">
+
+            <div className="absolute z-30 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-120 bg-white rounded-2xl shadow-2xl border border-zinc-200 p-5">
+              {/* Header */}
               <div className="flex items-center justify-between mb-5">
                 <div>
-                  <h3 className="hidden text-lg font-semibold">
-                    Add external media
+                  <h3 className="text-lg font-semibold text-zinc-900">
+                    Add External Media
                   </h3>
-                  <p className="hidden text-sm text-zinc-500 mt-1">
-                    Paste a direct image or video URL.
+                  <p className="text-sm text-zinc-500 mt-1">
+                    Paste a YouTube or Facebook embed code
                   </p>
                 </div>
+
                 <button
                   type="button"
                   onClick={() => setSource(null)}
-                  className=" w-9 h-9 rounded-full flex items-center justify-center hover:bg-zinc-100 transition "
+                  className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-zinc-100 transition"
                 >
                   <X size={18} />
                 </button>
               </div>
-              {/* <input
-                type="url"
-                value={externalUrl}
-                onChange={(e) => {
-                  setExternalUrl(e.target.value);
-                  setExternalError("");
-                }}
-                placeholder="https://example.com/image.jpg"
-                className="
-    w-full
-    h-12
-    px-4
-    rounded-xl
-    border
-    border-zinc-200
-    outline-none
-    focus:border-green-500
-    focus:ring-2
-    focus:ring-green-500/10
-  "
-              /> */}
 
-              <h1 className="text-center mb-10">
-                This Feature is Currently Under Development
-              </h1>
-              {externalError && (
-                <p className="text-sm text-red-500 mt-2">{externalError}</p>
-              )}
-              <div className="flex justify-end gap-2 mt-4">
+              {/* Input */}
+              <div>
+                <label className="block text-sm font-medium text-zinc-700 mb-2">
+                  Embed Code
+                </label>
+
+                <textarea
+                  value={externalMedia}
+                  onChange={(e) => setExternalMedia(e.target.value)}
+                  placeholder={`Paste YouTube or Facebook iframe code here...
+
+Example:
+<iframe src="https://www.youtube.com/embed/..." ...></iframe>`}
+                  rows={6}
+                  className="w-full resize-none rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100"
+                />
+
+                <p className="text-xs text-zinc-500 mt-2">
+                  Copy the iframe/embed code from YouTube or Facebook and paste
+                  it above.
+                </p>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex justify-end gap-2 mt-5">
                 <button
                   type="button"
-                  onClick={() => setSource(null)}
-                  className=" px-4 h-10 rounded-xl border border-zinc-200 hover:bg-zinc-50 "
+                  onClick={() => {
+                    setExternalMedia("");
+                    setSource(null);
+                  }}
+                  className="px-4 h-10 rounded-xl border border-zinc-200 hover:bg-zinc-50"
                 >
                   Cancel
                 </button>
+
                 <button
                   type="button"
-                  disabled={true}
+                  disabled={!externalMedia.trim()}
                   onClick={handleAddExternalMedia}
-                  className="
-    px-5
-    h-10
-    rounded-xl
-    bg-green-600
-    hover:bg-green-700
-    text-white
-    font-semibold disabled:bg-gray-500
-  "
+                  className="px-5 h-10 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold disabled:bg-gray-400 disabled:cursor-not-allowed"
                 >
                   Add media
                 </button>
@@ -271,7 +273,6 @@ const MediaEditorModal = ({
             </div>
           </>
         )}
-        {/* Footer */}
         <div className="h-14 sm:h-15 flex justify-end items-center px-4 sm:px-5 border-t border-zinc-100 shrink-0">
           <button
             onClick={handleNext}
