@@ -9,6 +9,7 @@ import {
   Plus,
   Headphones,
   BriefcaseBusiness,
+  Phone,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -32,7 +33,7 @@ const NavBar = ({ setIsPosting }) => {
     },
     { label: "Add", path: "/add", icon: <Plus size={26} />, isAdd: true },
     { label: "Messages", path: "/messages", icon: <MessageCircle size={22} /> },
-    { label: "Matches", path: "/matches", icon: <Trophy size={22} /> },
+    { label: "Advertise", path: "/advertisePage", icon: <Phone size={22} /> },
   ];
   const DesktopNavItems = [
     { label: "Home", path: "/feed", icon: <House size={22} /> },
@@ -41,7 +42,7 @@ const NavBar = ({ setIsPosting }) => {
       path: "/opportunities",
       icon: <BriefcaseBusiness size={22} />,
     },
-    { label: "Matches", path: "/matches", icon: <Trophy size={22} /> },
+    { label: "Advertise", path: "/advertisePage ", icon: <Phone size={22} /> },
     { label: "Messages", path: "/messages", icon: <MessageCircle size={22} /> },
     { label: "Alerts", path: "/alerts", icon: <Bell size={22} /> },
   ];

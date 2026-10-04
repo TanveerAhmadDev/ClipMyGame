@@ -18,6 +18,9 @@ import CreateOpportunity from "./pages/CreateOpportunity";
 import OpportunityDetails from "./pages/OpportunityDetails";
 import LaunchPage from "./pages/LaunchPage";
 import PublicRoute from "./PublicRoute";
+import ContactPage from "./pages/ContactPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminPage from "./pages/admin/AdminPage";
 
 const App = () => {
   const darkMode = useSelector((state) => state.theme.darkMode);
@@ -69,7 +72,9 @@ const App = () => {
             }
           />
           <Route path="/banner" element={<BannerManagement />} />
+          <Route path="/advertisePage" element={<ContactPage />} />
           <Route path="*" element={<PageNotFound />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </AuthInitializer>
       <ToastContainer position="top-right" autoClose={2500} theme="colored" />

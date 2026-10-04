@@ -12,6 +12,8 @@ import searchRouter from "../routes/search.router.js";
 import bannerRouter from "../routes/banner.router.js";
 import opportunityRouter from "../routes/opportunity.routes.js";
 import commentRouter from "../routes/comment.routes.js";
+import advertisementRouter from "../routes/advertisement.routes.js";
+import adminRouter from "../routes/admin.routes.js";
 
 const app = express();
 
@@ -48,6 +50,8 @@ app.use("/api/banner", bannerRouter);
 app.use("/api/opportunities", opportunityRouter);
 
 app.use("/api/comment", commentRouter);
+app.use("/api/advertisement", advertisementRouter);
+app.use("/api/admin", adminRouter);
 
 app.use(errorHandler);
 
