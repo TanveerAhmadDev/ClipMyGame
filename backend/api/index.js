@@ -19,7 +19,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["https://clip-my-game-rho.vercel.app", "http://localhost:5173"],
+    origin: ["https://clip-my-game-rho.vercel.app","https://sportfoliyo.com", "http://localhost:5173"],
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
